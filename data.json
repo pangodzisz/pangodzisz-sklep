@@ -1,0 +1,15 @@
+{
+  "logo": null,
+  "siteTitle": "Pan Godzisz",
+  "heroTitle": "Witaj w Pan Godzisz",
+  "heroText": "Drewno, narzędzia i rzemiosło — wybrane z pasją, dostarczone z troską.",
+  "aboutText": "Pan Godzisz to lokalny sklep z wieloletnią tradycją. Specjalizujemy się w drewnie opałowym, narzędziach ogrodniczych oraz rękodziele drewnianym. Stawiamy na jakość, uczciwe ceny i indywidualne podejście do klienta.",
+  "contactText": "ul. Leśna 12, 98-200 Sieradz<br>600 123 456<br>kontakt@pangodzisz.pl<br>Pon–Sob: 8:00–17:00",
+  "footerText": "© 2026 Pan Godzisz. Wszystkie prawa zastrzeżone.",
+  "products": [
+    {"id": 1, "emoji": "🪵", "image": null, "name": "Drewno opałowe (1m³)", "price": "180 zł", "desc": "Suche, sezonowane drewno opałowe, idealne do kominków i pieców. Wysoka kaloryczność, niska wilgotność."},
+    {"id": 2, "emoji": "🪓", "image": null, "name": "Siekiera kowalska", "price": "120 zł", "desc": "Ręcznie kute ostrze, ergonomiczna rękojeść z drewna jesionowego. Idealna do rąbania drewna kominkowego."},
+    {"id": 3, "emoji": "🌳", "image": null, "name": "Sadzonki drzew", "price": "35 zł", "desc": "Zdrowe sadzonki drzew liściastych i iglastych, hodowane lokalnie. Idealne do ogrodu i sadu."},
+    {"id": 4, "emoji": "🧰", "image": null, "name": "Zestaw narzędzi ogrodowych", "price": "250 zł", "desc": "Komplet podstawowych narzędzi ogrodniczych wysokiej jakości — łopata, grabie, sekator i więcej."}
+  ]
+}
