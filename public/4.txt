@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pan Godzisz</title>
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-soft:#f5f5f7;
+    --text:#1d1d1f;
+    --muted:#86868b;
+    --accent:#0071e3;
+    --accent-dark:#0058b3;
+    --border:#e8e8ed;
+    --radius:18px;
+    --transition:0.45s cubic-bezier(.25,.8,.25,1);
+  }
+  *{box-sizing:border-box;}
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{ color:inherit; }
+
+  /* ===== HEADER ===== */
+  header{
+    position:sticky;
+    top:0;
+    z-index:500;
+    background:rgba(255,255,255,0.8);
+    backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 26px;
+    height:56px;
+  }
+  .logo-wrap{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    cursor:default;
+    position:relative;
+  }
+  .logo-wrap img, .logo-wrap .logo-fallback{
+    height:30px;
+    width:30px;
+    object-fit:cover;
+    border-radius:8px;
+  }
+  .logo-fallback{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--bg-soft);
+    font-size:1.1em;
+  }
+  .logo-text{
+    font-size:1.05em;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  body.edit-mode .logo-wrap{ cursor:pointer; }
+  body.edit-mode .logo-wrap::after{
+    content:"✏️";
+    font-size:0.7em;
+    opacity:0.6;
+  }
+
+  nav.main-nav{
+    display:flex;
+    gap:28px;
+    font-size:0.86em;
+    font-weight:400;
+  }
+  nav.main-nav a{
+    text-decoration:none;
+    color:var(--text);
+    opacity:0.85;
+    transition:opacity 0.2s;
+  }
+  nav.main-nav a:hover{ opacity:1; }
+
+  .header-right{
+    display:flex;
+    align-items:center;
+    gap:18px;
+  }
+  .icon-btn{
+    background:none;
+    border:none;
+    cursor:pointer;
+    font-size:1.15em;
+    position:relative;
+    color:var(--text);
+    padding:4px;
+  }
+  .cart-count{
+    position:absolute;
+    top:-4px;
+    right:-6px;
+    background:var(--accent);
+    color:#fff;
+    font-size:0.6em;
+    font-weight:700;
+    border-radius:50%;
+    width:16px;
+    height:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  /* dyskretny przycisk logowania - widoczny tylko po najechaniu na rożek */
+  .admin-corner{
+    position:fixed;
+    bottom:0;
+    right:0;
+    width:34px;
+    height:34px;
+    opacity:0.06;
+    transition:opacity 0.3s;
+    z-index:400;
+    background:none;
+    border:none;
+    cursor:pointer;
+    font-size:1em;
+  }
+  .admin-corner:hover{ opacity:0.55; }
+  body.edit-mode .admin-corner{ display:none; }
+
+  .admin-bar{
+    display:none;
+    align-items:center;
+    gap:14px;
+  }
+  body.edit-mode .admin-bar{ display:flex; }
+  .pill{
+    font-size:0.72em;
+    font-weight:600;
+    background:#e7f6ec;
+    color:#1d7a3c;
+    padding:4px 10px;
+    border-radius:20px;
+  }
+  .btn{
+    border:none;
+    border-radius:980px;
+    padding:7px 16px;
+    font-size:0.82em;
+    font-weight:500;
+    cursor:pointer;
+    transition:transform 0.15s, background 0.2s;
+  }
+  .btn:active{ transform:scale(0.96); }
+  .btn-primary{ background:var(--accent); color:#fff; }
+  .btn-primary:hover{ background:var(--accent-dark); }
+  .btn-ghost{ background:var(--bg-soft); color:var(--text); }
+  .btn-ghost:hover{ background:#e2e2e6; }
+  .btn-danger{ background:#ff3b30; color:#fff; }
+
+  /* ===== HERO ===== */
+  .hero{
+    text-align:center;
+    padding:120px 20px 90px;
+    background:linear-gradient(180deg,#fbfbfd,var(--bg));
+  }
+  .hero h1{
+    font-size:clamp(2.4em,6vw,4.2em);
+    font-weight:700;
+    letter-spacing:-0.02em;
+    margin:0 0 14px;
+    opacity:0;
+    animation:fadeUp 0.9s var(--transition) forwards;
+  }
+  .hero p{
+    font-size:clamp(1.05em,2vw,1.35em);
+    color:var(--muted);
+    max-width:600px;
+    margin:0 auto 30px;
+    opacity:0;
+    animation:fadeUp 0.9s var(--transition) 0.15s forwards;
+  }
+  .hero .cta{
+    opacity:0;
+    animation:fadeUp 0.9s var(--transition) 0.3s forwards;
+  }
+  .hero .cta a{
+    display:inline-block;
+    background:var(--accent);
+    color:#fff;
+    text-decoration:none;
+    padding:12px 28px;
+    border-radius:980px;
+    font-size:0.95em;
+    font-weight:500;
+    transition:background 0.2s, transform 0.2s;
+  }
+  .hero .cta a:hover{ background:var(--accent-dark); transform:translateY(-1px); }
+
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(18px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  [contenteditable="true"]{
+    outline:1.5px dashed var(--accent);
+    border-radius:6px;
+    padding:2px 4px;
+  }
+
+  /* ===== SECTIONS ===== */
+  main{
+    max-width:1100px;
+    margin:0 auto;
+    padding:10px 24px 60px;
+  }
+  section{ margin:90px 0; }
+  .section-head{ text-align:center; margin-bottom:40px; }
+  .section-head h2{
+    font-size:clamp(1.8em,4vw,2.6em);
+    font-weight:700;
+    letter-spacing:-0.02em;
+    margin:0 0 8px;
+  }
+  .section-head p{ color:var(--muted); margin:0; font-size:1.05em; }
+
+  /* ===== PRODUKTY ===== */
+  .products{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:22px;
+  }
+  .product-card{
+    background:var(--bg-soft);
+    border-radius:var(--radius);
+    padding:0;
+    overflow:hidden;
+    cursor:pointer;
+    position:relative;
+    transition:transform var(--transition), box-shadow var(--transition);
+    opacity:0;
+    transform:translateY(24px);
+    animation:fadeUp 0.7s var(--transition) forwards;
+  }
+  .product-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 16px 30px rgba(0,0,0,0.08);
+  }
+  .product-img{
+    width:100%;
+    height:180px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#eceaea;
+    font-size:3.4em;
+    overflow:hidden;
+    position:relative;
+  }
+  .product-img img{ width:100%; height:100%; object-fit:cover; }
+  body.edit-mode .product-img::after{
+    content:"✏️ zmień zdjęcie";
+    position:absolute;
+    bottom:6px;
+    right:8px;
+    font-size:0.4em;
+    background:rgba(0,0,0,0.55);
+    color:#fff;
+    padding:4px 8px;
+    border-radius:6px;
+  }
+  .product-info{ padding:18px 20px 22px; text-align:center; }
+  .product-info h3{ margin:0 0 4px; font-size:1.08em; font-weight:600; }
+  .product-info .price{ color:var(--muted); font-size:0.95em; margin-bottom:12px; }
+  .product-desc-edit{
+    display:none;
+    width:100%;
+    min-height:54px;
+    margin:6px 0 12px;
+    border:1.5px dashed var(--accent);
+    border-radius:10px;
+    padding:8px 10px;
+    font-size:0.82em;
+    font-family:inherit;
+    color:var(--text);
+    resize:vertical;
+    background:#fff;
+  }
+  body.edit-mode .product-desc-edit{ display:block; }
+  .add-cart-btn{
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    border-radius:980px;
+    padding:8px 18px;
+    font-size:0.85em;
+    font-weight:500;
+    cursor:pointer;
+    transition:background 0.2s, transform 0.15s;
+  }
+  .add-cart-btn:hover{ background:var(--accent-dark); }
+  .add-cart-btn:active{ transform:scale(0.94); }
+  body.edit-mode .add-cart-btn{ display:none; }
+  .open-detail-edit-btn{
+    display:none;
+    background:var(--bg-soft);
+    border:1px solid var(--border);
+    color:var(--text);
+    border-radius:980px;
+    padding:8px 18px;
+    font-size:0.85em;
+    cursor:pointer;
+  }
+  body.edit-mode .open-detail-edit-btn{ display:inline-block; }
+  .remove-product{
+    position:absolute;
+    top:8px;
+    right:8px;
+    background:#ff3b30;
+    color:#fff;
+    border:none;
+    border-radius:50%;
+    width:24px;
+    height:24px;
+    cursor:pointer;
+    display:none;
+    z-index:5;
+    font-size:0.75em;
+  }
+  body.edit-mode .remove-product{ display:block; }
+  body.edit-mode .product-card{ cursor:default; }
+
+  #add-product-btn{
+    display:none;
+    margin:30px auto 0;
+    background:var(--bg-soft);
+    border:1.5px dashed var(--muted);
+    color:var(--text);
+    padding:12px 22px;
+    border-radius:980px;
+    cursor:pointer;
+    font-size:0.9em;
+  }
+  body.edit-mode #add-product-btn{ display:block; }
+
+  .about-text, .contact-text{
+    font-size:1.05em;
+    line-height:1.7;
+    color:var(--text);
+    max-width:700px;
+    margin:0 auto;
+    text-align:center;
+  }
+
+  footer{
+    text-align:center;
+    padding:30px 20px;
+    color:var(--muted);
+    font-size:0.82em;
+    border-top:1px solid var(--border);
+  }
+
+  /* ===== PRODUCT DETAIL OVERLAY (full page) ===== */
+  .detail-overlay{
+    position:fixed;
+    inset:0;
+    background:var(--bg);
+    z-index:900;
+    transform:translateY(100%);
+    transition:transform var(--transition);
+    overflow-y:auto;
+  }
+  .detail-overlay.active{ transform:translateY(0); }
+  .detail-close{
+    position:sticky;
+    top:0;
+    background:rgba(255,255,255,0.85);
+    backdrop-filter:blur(14px);
+    display:flex;
+    justify-content:flex-end;
+    padding:14px 20px;
+    z-index:5;
+    border-bottom:1px solid var(--border);
+  }
+  .detail-close button{
+    background:var(--bg-soft);
+    border:none;
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:1em;
+  }
+  .detail-body{
+    max-width:1000px;
+    margin:0 auto;
+    padding:40px 24px 30px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:50px;
+    align-items:center;
+  }
+  @media (max-width:760px){
+    .detail-body{ grid-template-columns:1fr; }
+  }
+  .detail-img{
+    width:100%;
+    aspect-ratio:1/1;
+    background:var(--bg-soft);
+    border-radius:24px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:7em;
+    overflow:hidden;
+    opacity:0;
+    transform:scale(0.9);
+    animation:fadeUp 0.6s var(--transition) 0.1s forwards;
+  }
+  .detail-img img{ width:100%; height:100%; object-fit:cover; }
+  .detail-info{
+    opacity:0;
+    animation:fadeUp 0.6s var(--transition) 0.25s forwards;
+  }
+  .detail-info h2{ font-size:2em; font-weight:700; margin:0 0 8px; letter-spacing:-0.02em; }
+  .detail-info .price{ font-size:1.3em; color:var(--muted); margin-bottom:20px; }
+  .detail-info .desc{ font-size:1.02em; line-height:1.7; color:var(--text); margin-bottom:30px; }
+  .qty-row{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:26px;
+  }
+  .qty-row button{
+    width:34px; height:34px;
+    border-radius:50%;
+    border:1px solid var(--border);
+    background:#fff;
+    font-size:1.1em;
+    cursor:pointer;
+  }
+  .qty-row span{ font-size:1.1em; min-width:24px; text-align:center; }
+  .detail-buy{
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:14px 30px;
+    border-radius:980px;
+    font-size:1em;
+    font-weight:500;
+    cursor:pointer;
+    transition:background 0.2s, transform 0.15s;
+  }
+  .detail-buy:hover{ background:var(--accent-dark); }
+  .detail-buy.added{ background:#34c759; }
+
+  /* ===== RELATED PRODUCTS (inne produkty) ===== */
+  .related-wrap{
+    max-width:1000px;
+    margin:0 auto;
+    padding:10px 24px 80px;
+    border-top:1px solid var(--border);
+    margin-top:20px;
+  }
+  .related-wrap h4{
+    font-size:1.15em;
+    font-weight:600;
+    margin:30px 0 18px;
+  }
+  .related-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:16px;
+  }
+  .related-card{
+    background:var(--bg-soft);
+    border-radius:14px;
+    overflow:hidden;
+    cursor:pointer;
+    transition:transform 0.25s ease;
+  }
+  .related-card:hover{ transform:translateY(-4px); }
+  .related-card .r-img{
+    height:110px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#eceaea;
+    font-size:2.2em;
+    overflow:hidden;
+  }
+  .related-card .r-img img{ width:100%; height:100%; object-fit:cover; }
+  .related-card .r-info{ padding:10px 12px 14px; text-align:center; }
+  .related-card .r-info .r-name{ font-size:0.85em; font-weight:600; }
+  .related-card .r-info .r-price{ font-size:0.78em; color:var(--muted); margin-top:2px; }
+
+  /* ===== CART PANEL ===== */
+  .cart-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.25);
+    z-index:850;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity var(--transition);
+  }
+  .cart-overlay.active{ opacity:1; pointer-events:auto; }
+  .cart-panel{
+    position:fixed;
+    top:0; right:0;
+    height:100%;
+    width:380px;
+    max-width:90vw;
+    background:#fff;
+    z-index:860;
+    box-shadow:-10px 0 40px rgba(0,0,0,0.15);
+    transform:translateX(100%);
+    transition:transform var(--transition);
+    display:flex;
+    flex-direction:column;
+  }
+  .cart-panel.active{ transform:translateX(0); }
+  .cart-head{
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid var(--border);
+  }
+  .cart-head h3{ margin:0; font-size:1.2em; }
+  .cart-items{ flex:1; overflow-y:auto; padding:10px 20px; }
+  .cart-item{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    padding:14px 0;
+    border-bottom:1px solid var(--border);
+  }
+  .cart-item .thumb{
+    width:54px; height:54px;
+    border-radius:10px;
+    background:var(--bg-soft);
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.6em;
+    overflow:hidden;
+  }
+  .cart-item .thumb img{ width:100%; height:100%; object-fit:cover; }
+  .cart-item .info{ flex:1; }
+  .cart-item .info .name{ font-weight:600; font-size:0.92em; }
+  .cart-item .info .price{ color:var(--muted); font-size:0.85em; }
+  .cart-item .remove-item{
+    background:none; border:none; cursor:pointer; color:var(--muted); font-size:0.9em;
+  }
+  .cart-empty{ text-align:center; color:var(--muted); padding:60px 20px; }
+  .cart-foot{ padding:20px; border-top:1px solid var(--border); }
+  .cart-total{ display:flex; justify-content:space-between; font-weight:600; margin-bottom:14px; }
+  .checkout-btn{
+    width:100%;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:13px;
+    border-radius:980px;
+    font-size:0.95em;
+    font-weight:500;
+    cursor:pointer;
+  }
+  .checkout-btn:hover{ background:var(--accent-dark); }
+
+  /* ===== CHECKOUT / ORDER FORM ===== */
+  .checkout-overlay-bg{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.4);
+    z-index:950;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .checkout-overlay-bg.active{ display:flex; }
+  .checkout-box{
+    background:#fff;
+    border-radius:20px;
+    width:100%;
+    max-width:480px;
+    max-height:90vh;
+    overflow-y:auto;
+    padding:28px;
+    box-shadow:0 24px 60px rgba(0,0,0,0.25);
+    animation:fadeUp 0.3s var(--transition);
+  }
+  .checkout-box h3{ margin:0 0 4px; font-size:1.3em; }
+  .checkout-box .checkout-sub{ color:var(--muted); font-size:0.85em; margin-bottom:18px; }
+  .checkout-summary{
+    background:var(--bg-soft);
+    border-radius:14px;
+    padding:14px 16px;
+    margin-bottom:20px;
+    font-size:0.85em;
+  }
+  .checkout-summary .cs-row{ display:flex; justify-content:space-between; padding:4px 0; }
+  .checkout-summary .cs-total{ font-weight:700; border-top:1px solid var(--border); margin-top:6px; padding-top:8px; }
+  .checkout-form label{
+    display:block;
+    font-size:0.8em;
+    font-weight:500;
+    color:var(--muted);
+    margin:12px 0 5px;
+  }
+  .checkout-form input, .checkout-form select, .checkout-form textarea{
+    width:100%;
+    padding:10px 12px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    font-size:0.95em;
+    font-family:inherit;
+  }
+  .checkout-form textarea{ resize:vertical; min-height:50px; }
+  .checkout-form .form-row2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .checkout-form .field-error{ border-color:#ff3b30 !important; }
+  .checkout-payment-note{
+    background:#fff8e6;
+    border:1px solid #f3dca0;
+    border-radius:10px;
+    padding:10px 12px;
+    font-size:0.78em;
+    color:#8a6d1d;
+    margin:18px 0;
+  }
+  .checkout-actions{ display:flex; gap:10px; margin-top:20px; }
+  .checkout-actions .btn{ flex:1; padding:12px; font-size:0.9em; }
+
+  /* ===== MODAL LOGOWANIA ===== */
+  .modal-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.4);
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+  }
+  .modal-overlay.active{ display:flex; }
+  .modal{
+    background:#fff;
+    padding:30px;
+    border-radius:18px;
+    width:90%;
+    max-width:380px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.2);
+    animation:fadeUp 0.3s var(--transition);
+  }
+  .modal h3{ margin-top:0; }
+  .modal label{ display:block; margin:14px 0 6px; font-weight:500; font-size:0.85em; color:var(--muted); }
+  .modal input{
+    width:100%;
+    padding:10px 12px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    font-size:1em;
+  }
+  .modal .modal-buttons{ display:flex; justify-content:flex-end; gap:10px; margin-top:22px; }
+  .error-msg{ color:#ff3b30; font-size:0.85em; margin-top:8px; display:none; }
+
+  .toast{
+    position:fixed;
+    bottom:24px;
+    left:50%;
+    transform:translateX(-50%) translateY(20px);
+    background:#1d1d1f;
+    color:#fff;
+    padding:12px 22px;
+    border-radius:980px;
+    font-size:0.9em;
+    opacity:0;
+    z-index:1100;
+    transition:opacity 0.3s, transform 0.3s;
+    pointer-events:none;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  input[type="file"]{ display:none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap" id="logo-wrap">
+    <div id="logo-image-holder"></div>
+    <span class="logo-text" id="site-title" contenteditable="false">Pan Godzisz</span>
+  </div>
+
+  <nav class="main-nav">
+    <a href="#oferta">Oferta</a>
+    <a href="#o-nas">O nas</a>
+    <a href="#kontakt">Kontakt</a>
+  </nav>
+
+  <div class="header-right">
+    <div class="admin-bar">
+      <span class="pill">Edycja</span>
+      <button class="btn btn-primary" id="save-btn">Zapisz</button>
+      <button class="btn btn-ghost" id="logout-btn">Wyloguj</button>
+    </div>
+    <button class="icon-btn" id="cart-btn" title="Koszyk">
+      🛍️<span class="cart-count" id="cart-count" style="display:none;">0</span>
+    </button>
+  </div>
+</header>
+
+<button class="admin-corner" id="login-btn" title="Panel zarządcy"> </button>
+
+<div class="hero">
+  <h1 id="hero-title" contenteditable="false">Witaj w Pan Godzisz</h1>
+  <p id="hero-text" contenteditable="false">Drewno, narzędzia i rzemiosło — wybrane z pasją, dostarczone z troską.</p>
+  <div class="cta"><a href="#oferta">Zobacz ofertę</a></div>
+</div>
+
+<main>
+  <section id="oferta">
+    <div class="section-head">
+      <h2>Oferta</h2>
+      <p>Wybrane produkty najwyższej jakości</p>
+    </div>
+    <div class="products" id="products-container"></div>
+    <button id="add-product-btn">＋ Dodaj produkt</button>
+  </section>
+
+  <section id="o-nas">
+    <div class="section-head"><h2>O nas</h2></div>
+    <p class="about-text" id="about-text" contenteditable="false">
+      Pan Godzisz to lokalny sklep z wieloletnią tradycją. Specjalizujemy się w drewnie opałowym, narzędziach
+      ogrodniczych oraz rękodziele drewnianym. Stawiamy na jakość, uczciwe ceny i indywidualne podejście do klienta.
+    </p>
+  </section>
+
+  <section id="kontakt">
+    <div class="section-head"><h2>Kontakt</h2></div>
+    <p class="contact-text" id="contact-text" contenteditable="false">
+      ul. Leśna 12, 98-200 Sieradz<br>
+      600 123 456<br>
+      kontakt@pangodzisz.pl<br>
+      Pon–Sob: 8:00–17:00
+    </p>
+  </section>
+</main>
+
+<footer id="footer-text" contenteditable="false">© 2026 Pan Godzisz. Wszystkie prawa zastrzeżone.</footer>
+
+<!-- ===== DETAIL OVERLAY ===== -->
+<div class="detail-overlay" id="detail-overlay">
+  <div class="detail-close"><button id="detail-close-btn">✕</button></div>
+  <div class="detail-body">
+    <div class="detail-img" id="detail-img"></div>
+    <div class="detail-info">
+      <h2 id="detail-name"></h2>
+      <div class="price" id="detail-price"></div>
+      <div class="desc" id="detail-desc"></div>
+      <div class="qty-row">
+        <button id="qty-minus">−</button>
+        <span id="qty-value">1</span>
+        <button id="qty-plus">+</button>
+      </div>
+      <button class="detail-buy" id="detail-buy-btn">Dodaj do koszyka</button>
+    </div>
+  </div>
+  <div class="related-wrap" id="related-wrap">
+    <h4>Inne produkty, które mogą Cię zainteresować</h4>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</div>
+
+<!-- ===== CART ===== -->
+<div class="cart-overlay" id="cart-overlay"></div>
+<div class="cart-panel" id="cart-panel">
+  <div class="cart-head">
+    <h3>Koszyk</h3>
+    <button id="cart-close-btn" style="background:none;border:none;font-size:1.2em;cursor:pointer;">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-foot">
+    <div class="cart-total"><span>Suma</span><span id="cart-total-value">0 zł</span></div>
+    <button class="checkout-btn" id="checkout-btn">Przejdź do zamówienia</button>
+  </div>
+</div>
+
+<!-- ===== CHECKOUT / ZAMÓWIENIE ===== -->
+<div class="checkout-overlay-bg" id="checkout-overlay-bg">
+  <div class="checkout-box">
+    <h3>Dokończ zamówienie</h3>
+    <div class="checkout-sub">Wypełnij dane dostawy i kontaktowe</div>
+
+    <div class="checkout-summary" id="checkout-summary"></div>
+
+    <div class="checkout-form">
+      <label for="co-name">Imię i nazwisko *</label>
+      <input type="text" id="co-name" placeholder="Jan Kowalski">
+
+      <div class="form-row2">
+        <div>
+          <label for="co-phone">Telefon *</label>
+          <input type="tel" id="co-phone" placeholder="600 123 456">
+        </div>
+        <div>
+          <label for="co-email">E-mail *</label>
+          <input type="email" id="co-email" placeholder="jan@przyklad.pl">
+        </div>
+      </div>
+
+      <label for="co-delivery">Sposób dostawy</label>
+      <select id="co-delivery">
+        <option value="kurier">Kurier — dostawa pod adres</option>
+        <option value="odbior">Odbiór osobisty w sklepie</option>
+      </select>
+
+      <div id="co-address-fields">
+        <label for="co-street">Ulica i numer *</label>
+        <input type="text" id="co-street" placeholder="ul. Leśna 12">
+
+        <div class="form-row2">
+          <div>
+            <label for="co-zip">Kod pocztowy *</label>
+            <input type="text" id="co-zip" placeholder="98-200">
+          </div>
+          <div>
+            <label for="co-city">Miasto *</label>
+            <input type="text" id="co-city" placeholder="Sieradz">
+          </div>
+        </div>
+      </div>
+
+      <label for="co-notes">Uwagi do zamówienia (opcjonalnie)</label>
+      <textarea id="co-notes" placeholder="Np. domofon, godziny dostawy itp."></textarea>
+    </div>
+
+    <div class="checkout-payment-note">
+      💳 Płatność zostanie skonfigurowana w kolejnym kroku (np. przelew, płatność przy odbiorze lub online). Na razie zamówienie zostanie przyjęte do realizacji.
+    </div>
+
+    <div class="checkout-actions">
+      <button class="btn btn-ghost" id="checkout-cancel-btn">Wróć do koszyka</button>
+      <button class="btn btn-primary" id="checkout-confirm-btn">Złóż zamówienie</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL LOGOWANIA ===== -->
+<div class="modal-overlay" id="login-modal">
+  <div class="modal">
+    <h3>Panel zarządcy</h3>
+    <label for="login-user">Login</label>
+    <input type="text" id="login-user" placeholder="admin">
+    <label for="login-pass">Hasło</label>
+    <input type="password" id="login-pass" placeholder="••••••••">
+    <div class="error-msg" id="login-error">Nieprawidłowy login lub hasło.</div>
+    <div class="modal-buttons">
+      <button class="btn btn-ghost" id="login-cancel">Anuluj</button>
+      <button class="btn btn-primary" id="login-confirm">Zaloguj</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="logo-file-input" accept="image/*">
+<input type="file" id="product-file-input" accept="image/*">
+
+<div class="toast" id="toast"></div>
+
+<script>
+const CART_KEY = "pangodzisz_cart";
+const TOKEN_KEY = "pangodzisz_admin_token";
+
+function loadCart(){
+  const raw = localStorage.getItem(CART_KEY);
+  if(raw){ try{ return JSON.parse(raw); }catch(e){} }
+  return [];
+}
+
+let siteData = null; // wczytywane z serwera (GET /api/data)
+let cart = loadCart();
+let editMode = false;
+let currentDetailProduct = null;
+let currentQty = 1;
+let authToken = localStorage.getItem(TOKEN_KEY) || null;
+
+/* ===== KOMUNIKACJA Z SERWEREM ===== */
+async function fetchSiteData(){
+  const res = await fetch('/api/data');
+  if(!res.ok) throw new Error('Nie udało się wczytać danych strony.');
+  return res.json();
+}
+
+async function apiLogin(user, pass){
+  const res = await fetch('/api/login', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({user, pass})
+  });
+  const data = await res.json();
+  if(!res.ok) throw new Error(data.error || 'Błąd logowania.');
+  return data.token;
+}
+
+async function apiSave(data){
+  const res = await fetch('/api/save', {
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'Authorization':'Bearer ' + authToken
+    },
+    body: JSON.stringify(data)
+  });
+  if(!res.ok){
+    const err = await res.json().catch(()=>({}));
+    throw new Error(err.error || 'Błąd zapisu.');
+  }
+  return res.json();
+}
+
+async function apiUploadImage(file){
+  const formData = new FormData();
+  formData.append('image', file);
+  const res = await fetch('/api/upload', {
+    method:'POST',
+    headers:{ 'Authorization':'Bearer ' + authToken },
+    body: formData
+  });
+  if(!res.ok){
+    const err = await res.json().catch(()=>({}));
+    throw new Error(err.error || 'Błąd przesyłania zdjęcia.');
+  }
+  const data = await res.json();
+  return data.url;
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+/* ===== RENDER GLOBAL CONTENT ===== */
+function renderLogo(){
+  const holder = document.getElementById('logo-image-holder');
+  if(siteData.logo){
+    holder.innerHTML = `<img src="${siteData.logo}" alt="logo">`;
+  } else {
+    holder.innerHTML = `<div class="logo-fallback">🪓</div>`;
+  }
+}
+function applyContent(){
+  document.getElementById('site-title').textContent = siteData.siteTitle;
+  document.getElementById('hero-title').textContent = siteData.heroTitle;
+  document.getElementById('hero-text').textContent = siteData.heroText;
+  document.getElementById('about-text').innerHTML = siteData.aboutText;
+  document.getElementById('contact-text').innerHTML = siteData.contactText;
+  document.getElementById('footer-text').textContent = siteData.footerText;
+  renderLogo();
+}
+
+/* ===== RENDER PRODUCTS ===== */
+function productImageHTML(p){
+  if(p.image){ return `<img src="${p.image}" alt="${p.name}">`; }
+  return p.emoji || "📦";
+}
+
+function renderProducts(){
+  const container = document.getElementById('products-container');
+  container.innerHTML = "";
+  siteData.products.forEach((p,idx) => {
+    const card = document.createElement('div');
+    card.className = "product-card";
+    card.dataset.id = p.id;
+    card.style.animationDelay = (idx*0.06)+"s";
+    card.innerHTML = `
+      <button class="remove-product" title="Usuń produkt">✕</button>
+      <div class="product-img">${productImageHTML(p)}</div>
+      <div class="product-info">
+        <h3 contenteditable="false">${p.name}</h3>
+        <div class="price" contenteditable="false">${p.price}</div>
+        <textarea class="product-desc-edit" placeholder="Opis produktu (widoczny w widoku szczegółów)">${p.desc || ""}</textarea>
+        <button class="add-cart-btn">Dodaj do koszyka</button>
+        <button class="open-detail-edit-btn">Podgląd / opis ➝</button>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+
+  container.querySelectorAll('.remove-product').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const card = e.target.closest('.product-card');
+      const id = parseInt(card.dataset.id);
+      siteData.products = siteData.products.filter(p => p.id !== id);
+      renderProducts();
+    });
+  });
+
+  container.querySelectorAll('.add-cart-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if(editMode) return;
+      const card = e.target.closest('.product-card');
+      const id = parseInt(card.dataset.id);
+      addToCart(id, 1);
+    });
+  });
+
+  container.querySelectorAll('.open-detail-edit-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const card = e.target.closest('.product-card');
+      const id = parseInt(card.dataset.id);
+      collectDataFromDOM();
+      openDetail(id);
+    });
+  });
+
+  container.querySelectorAll('.product-img').forEach(img => {
+    img.addEventListener('click', (e) => {
+      if(editMode){
+        e.stopPropagation();
+        const card = e.target.closest('.product-card');
+        const id = parseInt(card.dataset.id);
+        openProductImageUpload(id);
+      }
+    });
+  });
+
+  container.querySelectorAll('.product-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      if(editMode) return;
+      if(e.target.closest('.remove-product')) return;
+      if(e.target.closest('.add-cart-btn')) return;
+      const id = parseInt(card.dataset.id);
+      openDetail(id);
+    });
+  });
+
+  applyEditMode();
+}
+
+/* ===== EDIT MODE ===== */
+function applyEditMode(){
+  const ids = ['site-title','hero-title','hero-text','about-text','contact-text','footer-text'];
+  ids.forEach(id => document.getElementById(id).setAttribute('contenteditable', editMode ? 'true':'false'));
+  document.querySelectorAll('.product-card h3, .product-card .price').forEach(el=>{
+    el.setAttribute('contenteditable', editMode ? 'true':'false');
+  });
+  document.body.classList.toggle('edit-mode', editMode);
+}
+
+function collectDataFromDOM(){
+  siteData.siteTitle = document.getElementById('site-title').textContent.trim();
+  siteData.heroTitle = document.getElementById('hero-title').textContent.trim();
+  siteData.heroText = document.getElementById('hero-text').textContent.trim();
+  siteData.aboutText = document.getElementById('about-text').innerHTML.trim();
+  siteData.contactText = document.getElementById('contact-text').innerHTML.trim();
+  siteData.footerText = document.getElementById('footer-text').textContent.trim();
+
+  const cards = document.querySelectorAll('.product-card');
+  const updated = [];
+  cards.forEach(card => {
+    const id = parseInt(card.dataset.id);
+    const existing = siteData.products.find(p=>p.id===id) || {};
+    const name = card.querySelector('h3').textContent.trim();
+    const price = card.querySelector('.price').textContent.trim();
+    const descEl = card.querySelector('.product-desc-edit');
+    const desc = descEl ? descEl.value.trim() : (existing.desc || "");
+    updated.push({...existing, id, name, price, desc});
+  });
+  siteData.products = updated;
+}
+
+async function saveData(){
+  collectDataFromDOM();
+  try{
+    await apiSave(siteData);
+    showToast("Zmiany zapisane ✓ (widoczne dla wszystkich)");
+  }catch(err){
+    showToast("Błąd zapisu: " + err.message);
+  }
+}
+
+/* ===== LOGO / PRODUCT IMAGE UPLOAD ===== */
+const logoFileInput = document.getElementById('logo-file-input');
+const productFileInput = document.getElementById('product-file-input');
+let uploadTargetProductId = null;
+
+document.getElementById('logo-wrap').addEventListener('click', () => {
+  if(editMode){ logoFileInput.click(); }
+});
+logoFileInput.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if(!file) return;
+  try{
+    showToast("Przesyłanie logo...");
+    const url = await apiUploadImage(file);
+    siteData.logo = url;
+    renderLogo();
+    showToast("Logo zmienione — pamiętaj zapisać zmiany");
+  }catch(err){
+    showToast("Błąd: " + err.message);
+  }
+  logoFileInput.value = "";
+});
+
+function openProductImageUpload(id){
+  uploadTargetProductId = id;
+  productFileInput.click();
+}
+productFileInput.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if(!file || uploadTargetProductId == null) return;
+  try{
+    showToast("Przesyłanie zdjęcia...");
+    const url = await apiUploadImage(file);
+    collectDataFromDOM();
+    const p = siteData.products.find(pr => pr.id === uploadTargetProductId);
+    if(p){ p.image = url; }
+    renderProducts();
+    showToast("Zdjęcie zmienione — pamiętaj zapisać zmiany");
+  }catch(err){
+    showToast("Błąd: " + err.message);
+  }
+  productFileInput.value = "";
+});
+
+/* ===== ADD PRODUCT ===== */
+document.getElementById('add-product-btn').addEventListener('click', () => {
+  collectDataFromDOM();
+  const newId = Date.now();
+  siteData.products.push({id:newId, emoji:"🆕", image:null, name:"Nowy produkt", price:"0 zł", desc:"Opis nowego produktu."});
+  renderProducts();
+});
+
+/* ===== PRODUCT DETAIL OVERLAY ===== */
+const detailOverlay = document.getElementById('detail-overlay');
+function openDetail(id){
+  const p = siteData.products.find(pr => pr.id === id);
+  if(!p) return;
+  currentDetailProduct = p;
+  currentQty = 1;
+  document.getElementById('qty-value').textContent = currentQty;
+  document.getElementById('detail-img').innerHTML = productImageHTML(p);
+  document.getElementById('detail-name').textContent = p.name;
+  document.getElementById('detail-price').textContent = p.price;
+  document.getElementById('detail-desc').textContent = p.desc || "Brak opisu — dodaj go w panelu zarządcy.";
+  const buyBtn = document.getElementById('detail-buy-btn');
+  buyBtn.style.display = editMode ? "none" : "inline-block";
+  buyBtn.textContent = "Dodaj do koszyka";
+  buyBtn.classList.remove('added');
+  renderRelatedProducts(p.id);
+  detailOverlay.classList.add('active');
+  document.body.style.overflow = "hidden";
+}
+function closeDetail(){
+  detailOverlay.classList.remove('active');
+  document.body.style.overflow = "";
+}
+
+/* ===== RELATED / INNE PRODUKTY ===== */
+function renderRelatedProducts(currentId){
+  const grid = document.getElementById('related-grid');
+  const wrap = document.getElementById('related-wrap');
+  const others = siteData.products.filter(p => p.id !== currentId);
+  if(others.length === 0){
+    wrap.style.display = "none";
+    return;
+  }
+  wrap.style.display = "block";
+  grid.innerHTML = "";
+  others.forEach(p => {
+    const card = document.createElement('div');
+    card.className = "related-card";
+    card.innerHTML = `
+      <div class="r-img">${productImageHTML(p)}</div>
+      <div class="r-info">
+        <div class="r-name">${p.name}</div>
+        <div class="r-price">${p.price}</div>
+      </div>
+    `;
+    card.addEventListener('click', () => openDetail(p.id));
+    grid.appendChild(card);
+  });
+}
+
+document.getElementById('detail-close-btn').addEventListener('click', closeDetail);
+document.getElementById('qty-minus').addEventListener('click', () => {
+  if(currentQty>1) currentQty--;
+  document.getElementById('qty-value').textContent = currentQty;
+});
+document.getElementById('qty-plus').addEventListener('click', () => {
+  currentQty++;
+  document.getElementById('qty-value').textContent = currentQty;
+});
+document.getElementById('detail-buy-btn').addEventListener('click', (e) => {
+  if(!currentDetailProduct || editMode) return;
+  addToCart(currentDetailProduct.id, currentQty);
+  e.target.textContent = "Dodano ✓";
+  e.target.classList.add('added');
+  setTimeout(()=>{
+    e.target.textContent = "Dodaj do koszyka";
+    e.target.classList.remove('added');
+  }, 1300);
+});
+
+/* ===== CART ===== */
+const cartPanel = document.getElementById('cart-panel');
+const cartOverlay = document.getElementById('cart-overlay');
+
+function priceToNumber(priceStr){
+  const num = parseFloat(String(priceStr).replace(/[^\d.,]/g,"").replace(",","."));
+  return isNaN(num) ? 0 : num;
+}
+
+function addToCart(productId, qty){
+  const existing = cart.find(c => c.id === productId);
+  if(existing){ existing.qty += qty; }
+  else { cart.push({id:productId, qty:qty}); }
+  saveCart();
+  renderCart();
+  updateCartCount();
+  showToast("Dodano do koszyka 🛍️");
+  openCart();
+}
+
+function saveCart(){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
+
+function updateCartCount(){
+  const totalQty = cart.reduce((s,c)=>s+c.qty,0);
+  const countEl = document.getElementById('cart-count');
+  if(totalQty>0){
+    countEl.style.display = "flex";
+    countEl.textContent = totalQty;
+  } else {
+    countEl.style.display = "none";
+  }
+}
+
+function renderCart(){
+  const itemsEl = document.getElementById('cart-items');
+  itemsEl.innerHTML = "";
+  if(cart.length === 0){
+    itemsEl.innerHTML = `<div class="cart-empty">Twój koszyk jest pusty 🛍️</div>`;
+  } else {
+    let total = 0;
+    cart.forEach(c => {
+      const p = siteData.products.find(pr => pr.id === c.id);
+      if(!p) return;
+      const lineTotal = priceToNumber(p.price) * c.qty;
+      total += lineTotal;
+      const div = document.createElement('div');
+      div.className = "cart-item";
+      div.innerHTML = `
+        <div class="thumb">${productImageHTML(p)}</div>
+        <div class="info">
+          <div class="name">${p.name}</div>
+          <div class="price">${c.qty} × ${p.price}</div>
+        </div>
+        <button class="remove-item" data-id="${c.id}">Usuń</button>
+      `;
+      itemsEl.appendChild(div);
+    });
+    document.getElementById('cart-total-value').textContent = total.toFixed(0) + " zł";
+    itemsEl.querySelectorAll('.remove-item').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = parseInt(e.target.dataset.id);
+        cart = cart.filter(c => c.id !== id);
+        saveCart();
+        renderCart();
+        updateCartCount();
+      });
+    });
+  }
+  if(cart.length === 0){
+    document.getElementById('cart-total-value').textContent = "0 zł";
+  }
+}
+
+function openCart(){
+  cartPanel.classList.add('active');
+  cartOverlay.classList.add('active');
+}
+function closeCart(){
+  cartPanel.classList.remove('active');
+  cartOverlay.classList.remove('active');
+}
+document.getElementById('cart-btn').addEventListener('click', openCart);
+document.getElementById('cart-close-btn').addEventListener('click', closeCart);
+cartOverlay.addEventListener('click', closeCart);
+document.getElementById('checkout-btn').addEventListener('click', () => {
+  if(cart.length === 0){ showToast("Koszyk jest pusty"); return; }
+  openCheckoutForm();
+});
+
+/* ===== CHECKOUT FORM LOGIC ===== */
+const checkoutOverlayBg = document.getElementById('checkout-overlay-bg');
+const coDeliverySelect = document.getElementById('co-delivery');
+const coAddressFields = document.getElementById('co-address-fields');
+
+function renderCheckoutSummary(){
+  const box = document.getElementById('checkout-summary');
+  let html = "";
+  let total = 0;
+  cart.forEach(c => {
+    const p = siteData.products.find(pr => pr.id === c.id);
+    if(!p) return;
+    const lineTotal = priceToNumber(p.price) * c.qty;
+    total += lineTotal;
+    html += `<div class="cs-row"><span>${p.name} × ${c.qty}</span><span>${lineTotal.toFixed(0)} zł</span></div>`;
+  });
+  html += `<div class="cs-row cs-total"><span>Suma</span><span>${total.toFixed(0)} zł</span></div>`;
+  box.innerHTML = html;
+}
+
+function toggleAddressFields(){
+  coAddressFields.style.display = (coDeliverySelect.value === 'odbior') ? 'none' : 'block';
+}
+coDeliverySelect.addEventListener('change', toggleAddressFields);
+
+function openCheckoutForm(){
+  renderCheckoutSummary();
+  toggleAddressFields();
+  closeCart();
+  checkoutOverlayBg.classList.add('active');
+}
+function closeCheckoutForm(){
+  checkoutOverlayBg.classList.remove('active');
+}
+document.getElementById('checkout-cancel-btn').addEventListener('click', () => {
+  closeCheckoutForm();
+  openCart();
+});
+checkoutOverlayBg.addEventListener('click', (e) => {
+  if(e.target === checkoutOverlayBg) closeCheckoutForm();
+});
+
+function clearFieldErrors(){
+  document.querySelectorAll('.checkout-form .field-error').forEach(el => el.classList.remove('field-error'));
+}
+
+document.getElementById('checkout-confirm-btn').addEventListener('click', () => {
+  clearFieldErrors();
+  const name = document.getElementById('co-name');
+  const phone = document.getElementById('co-phone');
+  const email = document.getElementById('co-email');
+  const street = document.getElementById('co-street');
+  const zip = document.getElementById('co-zip');
+  const city = document.getElementById('co-city');
+  const needsAddress = coDeliverySelect.value !== 'odbior';
+
+  let valid = true;
+  function check(el, ok){ if(!ok){ el.classList.add('field-error'); valid = false; } }
+
+  check(name, name.value.trim().length > 1);
+  check(phone, phone.value.trim().length > 5);
+  check(email, /.+@.+\..+/.test(email.value.trim()));
+  if(needsAddress){
+    check(street, street.value.trim().length > 2);
+    check(zip, zip.value.trim().length > 3);
+    check(city, city.value.trim().length > 1);
+  }
+
+  if(!valid){
+    showToast("Uzupełnij wymagane pola (oznaczone *)");
+    return;
+  }
+
+  // ===== TODO: PŁATNOŚĆ =====
+  // Tutaj w przyszłości można podłączyć prawdziwą płatność (np. Stripe, PayU, Przelewy24).
+  // Na razie zamówienie jest tylko zatwierdzane lokalnie (brak backendu zamówień).
+  // Dane zamówienia dostępne w obiekcie `orderData` poniżej, gdyby trzeba je wysłać do API.
+  const orderData = {
+    name: name.value.trim(),
+    phone: phone.value.trim(),
+    email: email.value.trim(),
+    delivery: coDeliverySelect.value,
+    street: needsAddress ? street.value.trim() : "",
+    zip: needsAddress ? zip.value.trim() : "",
+    city: needsAddress ? city.value.trim() : "",
+    notes: document.getElementById('co-notes').value.trim(),
+    items: cart.map(c => {
+      const p = siteData.products.find(pr => pr.id === c.id);
+      return p ? { name:p.name, price:p.price, qty:c.qty } : null;
+    }).filter(Boolean)
+  };
+  console.log("Nowe zamówienie:", orderData);
+
+  showToast("Zamówienie złożone! Skontaktujemy się w celu finalizacji. 🎉");
+  cart = [];
+  saveCart();
+  renderCart();
+  updateCartCount();
+  closeCheckoutForm();
+
+  ['co-name','co-phone','co-email','co-street','co-zip','co-notes'].forEach(id => {
+    document.getElementById(id).value = "";
+  });
+});
+
+/* ===== LOGIN ===== */
+const loginModal = document.getElementById('login-modal');
+document.getElementById('login-btn').addEventListener('click', () => {
+  loginModal.classList.add('active');
+  document.getElementById('login-error').style.display = "none";
+  document.getElementById('login-user').value = "";
+  document.getElementById('login-pass').value = "";
+});
+document.getElementById('login-cancel').addEventListener('click', () => loginModal.classList.remove('active'));
+document.getElementById('login-confirm').addEventListener('click', async () => {
+  const user = document.getElementById('login-user').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  try{
+    const token = await apiLogin(user, pass);
+    authToken = token;
+    localStorage.setItem(TOKEN_KEY, token);
+    editMode = true;
+    loginModal.classList.remove('active');
+    applyEditMode();
+    showToast("Zalogowano jako zarządca");
+  }catch(err){
+    document.getElementById('login-error').style.display = "block";
+  }
+});
+document.getElementById('login-pass').addEventListener('keydown', (e) => {
+  if(e.key === "Enter") document.getElementById('login-confirm').click();
+});
+document.getElementById('logout-btn').addEventListener('click', () => {
+  editMode = false;
+  authToken = null;
+  localStorage.removeItem(TOKEN_KEY);
+  applyEditMode();
+});
+document.getElementById('save-btn').addEventListener('click', saveData);
+
+/* ===== INIT ===== */
+(async function init(){
+  try{
+    siteData = await fetchSiteData();
+  }catch(err){
+    showToast("Nie udało się połączyć z serwerem.");
+    siteData = { logo:null, siteTitle:"Pan Godzisz", heroTitle:"Witaj", heroText:"", aboutText:"", contactText:"", footerText:"", products:[] };
+  }
+  applyContent();
+  renderProducts();
+  renderCart();
+  updateCartCount();
+  if(authToken){
+    editMode = true;
+    applyEditMode();
+  }
+})();
+</script>
+
+</body>
+</html>
