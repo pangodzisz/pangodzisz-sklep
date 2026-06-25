@@ -27,7 +27,6 @@
     overflow-x:hidden;
   }
   a{ color:inherit; }
-
   /* ===== HEADER ===== */
   header{
     position:sticky;
@@ -69,11 +68,10 @@
   }
   body.edit-mode .logo-wrap{ cursor:pointer; }
   body.edit-mode .logo-wrap::after{
-    content:"✏️";
+    content:"/n";
     font-size:0.7em;
     opacity:0.6;
   }
-
   nav.main-nav{
     display:flex;
     gap:28px;
@@ -87,7 +85,6 @@
     transition:opacity 0.2s;
   }
   nav.main-nav a:hover{ opacity:1; }
-
   .header-right{
     display:flex;
     align-items:center;
@@ -117,8 +114,7 @@
     align-items:center;
     justify-content:center;
   }
-
-  /* dyskretny przycisk logowania - widoczny tylko po najechaniu na rożek */
+  /* dyskretny przycisk logowania - widoczny tylko po najechaniu na ronek */
   .admin-corner{
     position:fixed;
     bottom:0;
@@ -135,7 +131,6 @@
   }
   .admin-corner:hover{ opacity:0.55; }
   body.edit-mode .admin-corner{ display:none; }
-
   .admin-bar{
     display:none;
     align-items:center;
@@ -165,7 +160,6 @@
   .btn-ghost{ background:var(--bg-soft); color:var(--text); }
   .btn-ghost:hover{ background:#e2e2e6; }
   .btn-danger{ background:#ff3b30; color:#fff; }
-
   /* ===== HERO ===== */
   .hero{
     text-align:center;
@@ -204,18 +198,15 @@
     transition:background 0.2s, transform 0.2s;
   }
   .hero .cta a:hover{ background:var(--accent-dark); transform:translateY(-1px); }
-
   @keyframes fadeUp{
     from{ opacity:0; transform:translateY(18px); }
     to{ opacity:1; transform:translateY(0); }
   }
-
   [contenteditable="true"]{
     outline:1.5px dashed var(--accent);
     border-radius:6px;
     padding:2px 4px;
   }
-
   /* ===== SECTIONS ===== */
   main{
     max-width:1100px;
@@ -231,7 +222,6 @@
     margin:0 0 8px;
   }
   .section-head p{ color:var(--muted); margin:0; font-size:1.05em; }
-
   /* ===== PRODUKTY ===== */
   .products{
     display:grid;
@@ -259,15 +249,15 @@
     height:180px;
     display:flex;
     align-items:center;
+  }
     justify-content:center;
     background:#eceaea;
     font-size:3.4em;
     overflow:hidden;
     position:relative;
-  }
   .product-img img{ width:100%; height:100%; object-fit:cover; }
   body.edit-mode .product-img::after{
-    content:"✏️ zmień zdjęcie";
+    content:"/n zmien zdjncie";
     position:absolute;
     bottom:6px;
     right:8px;
@@ -280,6 +270,21 @@
   .product-info{ padding:18px 20px 22px; text-align:center; }
   .product-info h3{ margin:0 0 4px; font-size:1.08em; font-weight:600; }
   .product-info .price{ color:var(--muted); font-size:0.95em; margin-bottom:12px; }
+  .product-desc-edit{
+    display:none;
+    width:100%;
+    min-height:54px;
+    margin:6px 0 12px;
+    border:1.5px dashed var(--accent);
+    border-radius:10px;
+    padding:8px 10px;
+    font-size:0.82em;
+    font-family:inherit;
+    color:var(--text);
+    resize:vertical;
+    background:#fff;
+  }
+  body.edit-mode .product-desc-edit{ display:block; }
   .add-cart-btn{
     background:var(--accent);
     color:#fff;
@@ -293,6 +298,18 @@
   }
   .add-cart-btn:hover{ background:var(--accent-dark); }
   .add-cart-btn:active{ transform:scale(0.94); }
+  body.edit-mode .add-cart-btn{ display:none; }
+  .open-detail-edit-btn{
+    display:none;
+    background:var(--bg-soft);
+    border:1px solid var(--border);
+    color:var(--text);
+    border-radius:980px;
+    padding:8px 18px;
+    font-size:0.85em;
+    cursor:pointer;
+  }
+  body.edit-mode .open-detail-edit-btn{ display:inline-block; }
   .remove-product{
     position:absolute;
     top:8px;
@@ -310,7 +327,6 @@
   }
   body.edit-mode .remove-product{ display:block; }
   body.edit-mode .product-card{ cursor:default; }
-
   #add-product-btn{
     display:none;
     margin:30px auto 0;
@@ -319,11 +335,10 @@
     color:var(--text);
     padding:12px 22px;
     border-radius:980px;
+  }
     cursor:pointer;
     font-size:0.9em;
-  }
   body.edit-mode #add-product-btn{ display:block; }
-
   .about-text, .contact-text{
     font-size:1.05em;
     line-height:1.7;
@@ -332,7 +347,6 @@
     margin:0 auto;
     text-align:center;
   }
-
   footer{
     text-align:center;
     padding:30px 20px;
@@ -340,7 +354,6 @@
     font-size:0.82em;
     border-top:1px solid var(--border);
   }
-
   /* ===== PRODUCT DETAIL OVERLAY (full page) ===== */
   .detail-overlay{
     position:fixed;
@@ -375,7 +388,7 @@
   .detail-body{
     max-width:1000px;
     margin:0 auto;
-    padding:40px 24px 100px;
+    padding:40px 24px 30px;
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:50px;
@@ -434,7 +447,45 @@
   }
   .detail-buy:hover{ background:var(--accent-dark); }
   .detail-buy.added{ background:#34c759; }
-
+  /* ===== RELATED PRODUCTS (inne produkty) ===== */
+  .related-wrap{
+    max-width:1000px;
+    margin:0 auto;
+    padding:10px 24px 80px;
+    border-top:1px solid var(--border);
+    margin-top:20px;
+  }
+  .related-wrap h4{
+    font-size:1.15em;
+    font-weight:600;
+    margin:30px 0 18px;
+  }
+  .related-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:16px;
+  }
+  .related-card{
+    background:var(--bg-soft);
+    border-radius:14px;
+    overflow:hidden;
+    cursor:pointer;
+    transition:transform 0.25s ease;
+  }
+  .related-card:hover{ transform:translateY(-4px); }
+  .related-card .r-img{
+    height:110px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#eceaea;
+    font-size:2.2em;
+    overflow:hidden;
+  }
+  .related-card .r-img img{ width:100%; height:100%; object-fit:cover; }
+  .related-card .r-info{ padding:10px 12px 14px; text-align:center; }
+  .related-card .r-info .r-name{ font-size:0.85em; font-weight:600; }
+  .related-card .r-info .r-price{ font-size:0.78em; color:var(--muted); margin-top:2px; }
   /* ===== CART PANEL ===== */
   .cart-overlay{
     position:fixed;
@@ -507,7 +558,6 @@
     cursor:pointer;
   }
   .checkout-btn:hover{ background:var(--accent-dark); }
-
   /* ===== MODAL LOGOWANIA ===== */
   .modal-overlay{
     display:none;
@@ -539,7 +589,6 @@
   }
   .modal .modal-buttons{ display:flex; justify-content:flex-end; gap:10px; margin-top:22px; }
   .error-msg{ color:#ff3b30; font-size:0.85em; margin-top:8px; display:none; }
-
   .toast{
     position:fixed;
     bottom:24px;
@@ -556,24 +605,20 @@
     pointer-events:none;
   }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
-
   input[type="file"]{ display:none; }
 </style>
 </head>
 <body>
-
 <header>
   <div class="logo-wrap" id="logo-wrap">
     <div id="logo-image-holder"></div>
     <span class="logo-text" id="site-title" contenteditable="false">Pan Godzisz</span>
   </div>
-
   <nav class="main-nav">
     <a href="#oferta">Oferta</a>
     <a href="#o-nas">O nas</a>
     <a href="#kontakt">Kontakt</a>
   </nav>
-
   <div class="header-right">
     <div class="admin-bar">
       <span class="pill">Edycja</span>
@@ -581,53 +626,46 @@
       <button class="btn btn-ghost" id="logout-btn">Wyloguj</button>
     </div>
     <button class="icon-btn" id="cart-btn" title="Koszyk">
-      🛍️<span class="cart-count" id="cart-count" style="display:none;">0</span>
+nn<span class="cart-count" id="cart-count" style="display:none;">0</span>
     </button>
   </div>
 </header>
-
-<button class="admin-corner" id="login-btn" title="Panel zarządcy"> </button>
-
+<button class="admin-corner" id="login-btn" title="Panel zarzndcy"> </button>
 <div class="hero">
   <h1 id="hero-title" contenteditable="false">Witaj w Pan Godzisz</h1>
-  <p id="hero-text" contenteditable="false">Drewno, narzędzia i rzemiosło — wybrane z pasją, dostarczone z troską.</p>
-  <div class="cta"><a href="#oferta">Zobacz ofertę</a></div>
+  <p id="hero-text" contenteditable="false">Drewno, narzndzia i rzemiosno — wybrane z pasjn, dostarczone z troskn.</p>
+  <div class="cta"><a href="#oferta">Zobacz ofertn</a></div>
 </div>
-
 <main>
   <section id="oferta">
     <div class="section-head">
       <h2>Oferta</h2>
-      <p>Wybrane produkty najwyższej jakości</p>
+      <p>Wybrane produkty najwynszej jakonci</p>
     </div>
     <div class="products" id="products-container"></div>
-    <button id="add-product-btn">＋ Dodaj produkt</button>
+    <button id="add-product-btn">n Dodaj produkt</button>
   </section>
-
   <section id="o-nas">
     <div class="section-head"><h2>O nas</h2></div>
     <p class="about-text" id="about-text" contenteditable="false">
-      Pan Godzisz to lokalny sklep z wieloletnią tradycją. Specjalizujemy się w drewnie opałowym, narzędziach
-      ogrodniczych oraz rękodziele drewnianym. Stawiamy na jakość, uczciwe ceny i indywidualne podejście do klienta.
+      Pan Godzisz to lokalny sklep z wieloletnin tradycjn. Specjalizujemy sin w drewnie opanowym, narzndziach
+      ogrodniczych oraz rnkodziele drewnianym. Stawiamy na jakonn, uczciwe ceny i indywidualne podejncie do klienta.
     </p>
   </section>
-
   <section id="kontakt">
     <div class="section-head"><h2>Kontakt</h2></div>
     <p class="contact-text" id="contact-text" contenteditable="false">
-      ul. Leśna 12, 98-200 Sieradz<br>
+      ul. Lenna 12, 98-200 Sieradz<br>
       600 123 456<br>
       kontakt@pangodzisz.pl<br>
       Pon–Sob: 8:00–17:00
     </p>
   </section>
 </main>
-
-<footer id="footer-text" contenteditable="false">© 2026 Pan Godzisz. Wszystkie prawa zastrzeżone.</footer>
-
+<footer id="footer-text" contenteditable="false">© 2026 Pan Godzisz. Wszystkie prawa zastrzenone.</footer>
 <!-- ===== DETAIL OVERLAY ===== -->
 <div class="detail-overlay" id="detail-overlay">
-  <div class="detail-close"><button id="detail-close-btn">✕</button></div>
+  <div class="detail-close"><button id="detail-close-btn">5</button></div>
   <div class="detail-body">
     <div class="detail-img" id="detail-img"></div>
     <div class="detail-info">
@@ -635,74 +673,69 @@
       <div class="price" id="detail-price"></div>
       <div class="desc" id="detail-desc"></div>
       <div class="qty-row">
-        <button id="qty-minus">−</button>
+        <button id="qty-minus">-</button>
         <span id="qty-value">1</span>
         <button id="qty-plus">+</button>
       </div>
       <button class="detail-buy" id="detail-buy-btn">Dodaj do koszyka</button>
     </div>
   </div>
+  <div class="related-wrap" id="related-wrap">
+    <h4>Inne produkty, które mogn Cin zainteresowan</h4>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
 </div>
-
 <!-- ===== CART ===== -->
 <div class="cart-overlay" id="cart-overlay"></div>
 <div class="cart-panel" id="cart-panel">
   <div class="cart-head">
     <h3>Koszyk</h3>
-    <button id="cart-close-btn" style="background:none;border:none;font-size:1.2em;cursor:pointer;">✕</button>
+    <button id="cart-close-btn" style="background:none;border:none;font-size:1.2em;cursor:pointer;">5</button>
   </div>
   <div class="cart-items" id="cart-items"></div>
   <div class="cart-foot">
-    <div class="cart-total"><span>Suma</span><span id="cart-total-value">0 zł</span></div>
-    <button class="checkout-btn" id="checkout-btn">Przejdź do zamówienia</button>
+    <div class="cart-total"><span>Suma</span><span id="cart-total-value">0 zn</span></div>
+    <button class="checkout-btn" id="checkout-btn">Przejdn do zamówienia</button>
   </div>
 </div>
-
 <!-- ===== MODAL LOGOWANIA ===== -->
 <div class="modal-overlay" id="login-modal">
   <div class="modal">
-    <h3>Panel zarządcy</h3>
+    <h3>Panel zarzndcy</h3>
     <label for="login-user">Login</label>
     <input type="text" id="login-user" placeholder="admin">
-    <label for="login-pass">Hasło</label>
+    <label for="login-pass">Hasno</label>
     <input type="password" id="login-pass" placeholder="••••••••">
-    <div class="error-msg" id="login-error">Nieprawidłowy login lub hasło.</div>
+    <div class="error-msg" id="login-error">Nieprawidnowy login lub hasno.</div>
     <div class="modal-buttons">
       <button class="btn btn-ghost" id="login-cancel">Anuluj</button>
       <button class="btn btn-primary" id="login-confirm">Zaloguj</button>
     </div>
   </div>
 </div>
-
 <input type="file" id="logo-file-input" accept="image/*">
 <input type="file" id="product-file-input" accept="image/*">
-
 <div class="toast" id="toast"></div>
-
 <script>
 const CART_KEY = "pangodzisz_cart";
 const TOKEN_KEY = "pangodzisz_admin_token";
-
 function loadCart(){
   const raw = localStorage.getItem(CART_KEY);
   if(raw){ try{ return JSON.parse(raw); }catch(e){} }
   return [];
 }
-
 let siteData = null; // wczytywane z serwera (GET /api/data)
 let cart = loadCart();
 let editMode = false;
 let currentDetailProduct = null;
 let currentQty = 1;
 let authToken = localStorage.getItem(TOKEN_KEY) || null;
-
 /* ===== KOMUNIKACJA Z SERWEREM ===== */
 async function fetchSiteData(){
   const res = await fetch('/api/data');
-  if(!res.ok) throw new Error('Nie udało się wczytać danych strony.');
+  if(!res.ok) throw new Error('Nie udano sin wczytan danych strony.');
   return res.json();
 }
-
 async function apiLogin(user, pass){
   const res = await fetch('/api/login', {
     method:'POST',
@@ -710,10 +743,9 @@ async function apiLogin(user, pass){
     body: JSON.stringify({user, pass})
   });
   const data = await res.json();
-  if(!res.ok) throw new Error(data.error || 'Błąd logowania.');
-  return data.token;
 }
-
+  if(!res.ok) throw new Error(data.error || 'Bnnd logowania.');
+  return data.token;
 async function apiSave(data){
   const res = await fetch('/api/save', {
     method:'POST',
@@ -725,11 +757,10 @@ async function apiSave(data){
   });
   if(!res.ok){
     const err = await res.json().catch(()=>({}));
-    throw new Error(err.error || 'Błąd zapisu.');
+    throw new Error(err.error || 'Bnnd zapisu.');
   }
   return res.json();
 }
-
 async function apiUploadImage(file){
   const formData = new FormData();
   formData.append('image', file);
@@ -740,26 +771,24 @@ async function apiUploadImage(file){
   });
   if(!res.ok){
     const err = await res.json().catch(()=>({}));
-    throw new Error(err.error || 'Błąd przesyłania zdjęcia.');
+    throw new Error(err.error || 'Bnnd przesynania zdjncia.');
   }
   const data = await res.json();
   return data.url;
 }
-
 function showToast(msg){
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'), 2200);
 }
-
 /* ===== RENDER GLOBAL CONTENT ===== */
 function renderLogo(){
   const holder = document.getElementById('logo-image-holder');
   if(siteData.logo){
     holder.innerHTML = `<img src="${siteData.logo}" alt="logo">`;
   } else {
-    holder.innerHTML = `<div class="logo-fallback">🪓</div>`;
+    holder.innerHTML = `<div class="logo-fallback">n</div>`;
   }
 }
 function applyContent(){
@@ -771,13 +800,11 @@ function applyContent(){
   document.getElementById('footer-text').textContent = siteData.footerText;
   renderLogo();
 }
-
 /* ===== RENDER PRODUCTS ===== */
 function productImageHTML(p){
   if(p.image){ return `<img src="${p.image}" alt="${p.name}">`; }
-  return p.emoji || "📦";
+  return p.emoji || "n";
 }
-
 function renderProducts(){
   const container = document.getElementById('products-container');
   container.innerHTML = "";
@@ -787,17 +814,19 @@ function renderProducts(){
     card.dataset.id = p.id;
     card.style.animationDelay = (idx*0.06)+"s";
     card.innerHTML = `
-      <button class="remove-product" title="Usuń produkt">✕</button>
+      <button class="remove-product" title="Usun produkt">5</button>
       <div class="product-img">${productImageHTML(p)}</div>
       <div class="product-info">
         <h3 contenteditable="false">${p.name}</h3>
         <div class="price" contenteditable="false">${p.price}</div>
+        <textarea class="product-desc-edit" placeholder="Opis produktu (widoczny w widoku szczegónów)">${p.desc || ""}
+</textarea>
         <button class="add-cart-btn">Dodaj do koszyka</button>
+        <button class="open-detail-edit-btn">Podglnd / opis </button>
       </div>
     `;
     container.appendChild(card);
   });
-
   container.querySelectorAll('.remove-product').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -807,7 +836,6 @@ function renderProducts(){
       renderProducts();
     });
   });
-
   container.querySelectorAll('.add-cart-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -817,7 +845,15 @@ function renderProducts(){
       addToCart(id, 1);
     });
   });
-
+  container.querySelectorAll('.open-detail-edit-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const card = e.target.closest('.product-card');
+      const id = parseInt(card.dataset.id);
+      collectDataFromDOM();
+      openDetail(id);
+    });
+  });
   container.querySelectorAll('.product-img').forEach(img => {
     img.addEventListener('click', (e) => {
       if(editMode){
@@ -828,7 +864,6 @@ function renderProducts(){
       }
     });
   });
-
   container.querySelectorAll('.product-card').forEach(card => {
     card.addEventListener('click', (e) => {
       if(editMode) return;
@@ -838,10 +873,8 @@ function renderProducts(){
       openDetail(id);
     });
   });
-
   applyEditMode();
 }
-
 /* ===== EDIT MODE ===== */
 function applyEditMode(){
   const ids = ['site-title','hero-title','hero-text','about-text','contact-text','footer-text'];
@@ -851,7 +884,6 @@ function applyEditMode(){
   });
   document.body.classList.toggle('edit-mode', editMode);
 }
-
 function collectDataFromDOM(){
   siteData.siteTitle = document.getElementById('site-title').textContent.trim();
   siteData.heroTitle = document.getElementById('hero-title').textContent.trim();
@@ -859,7 +891,6 @@ function collectDataFromDOM(){
   siteData.aboutText = document.getElementById('about-text').innerHTML.trim();
   siteData.contactText = document.getElementById('contact-text').innerHTML.trim();
   siteData.footerText = document.getElementById('footer-text').textContent.trim();
-
   const cards = document.querySelectorAll('.product-card');
   const updated = [];
   cards.forEach(card => {
@@ -867,26 +898,25 @@ function collectDataFromDOM(){
     const existing = siteData.products.find(p=>p.id===id) || {};
     const name = card.querySelector('h3').textContent.trim();
     const price = card.querySelector('.price').textContent.trim();
-    updated.push({...existing, id, name, price});
+    const descEl = card.querySelector('.product-desc-edit');
+    const desc = descEl ? descEl.value.trim() : (existing.desc || "");
+    updated.push({...existing, id, name, price, desc});
   });
-  siteData.products = updated;
 }
-
+  siteData.products = updated;
 async function saveData(){
   collectDataFromDOM();
   try{
     await apiSave(siteData);
-    showToast("Zmiany zapisane ✓ (widoczne dla wszystkich)");
+    showToast("Zmiany zapisane 3 (widoczne dla wszystkich)");
   }catch(err){
-    showToast("Błąd zapisu: " + err.message);
+    showToast("Bnnd zapisu: " + err.message);
   }
 }
-
 /* ===== LOGO / PRODUCT IMAGE UPLOAD ===== */
 const logoFileInput = document.getElementById('logo-file-input');
 const productFileInput = document.getElementById('product-file-input');
 let uploadTargetProductId = null;
-
 document.getElementById('logo-wrap').addEventListener('click', () => {
   if(editMode){ logoFileInput.click(); }
 });
@@ -894,17 +924,16 @@ logoFileInput.addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if(!file) return;
   try{
-    showToast("Przesyłanie logo...");
+    showToast("Przesynanie logo...");
     const url = await apiUploadImage(file);
     siteData.logo = url;
     renderLogo();
-    showToast("Logo zmienione — pamiętaj zapisać zmiany");
+    showToast("Logo zmienione — pamintaj zapisan zmiany");
   }catch(err){
-    showToast("Błąd: " + err.message);
+    showToast("Bnnd: " + err.message);
   }
   logoFileInput.value = "";
 });
-
 function openProductImageUpload(id){
   uploadTargetProductId = id;
   productFileInput.click();
@@ -913,25 +942,26 @@ productFileInput.addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if(!file || uploadTargetProductId == null) return;
   try{
-    showToast("Przesyłanie zdjęcia...");
+    showToast("Przesynanie zdjncia...");
     const url = await apiUploadImage(file);
+    collectDataFromDOM();
     const p = siteData.products.find(pr => pr.id === uploadTargetProductId);
     if(p){ p.image = url; }
     renderProducts();
-    showToast("Zdjęcie zmienione — pamiętaj zapisać zmiany");
+    showToast("Zdjncie zmienione — pamintaj zapisan zmiany");
   }catch(err){
-    showToast("Błąd: " + err.message);
+    showToast("Bnnd: " + err.message);
   }
   productFileInput.value = "";
 });
-
 /* ===== ADD PRODUCT ===== */
 document.getElementById('add-product-btn').addEventListener('click', () => {
+  collectDataFromDOM();
   const newId = Date.now();
-  siteData.products.push({id:newId, emoji:"🆕", image:null, name:"Nowy produkt", price:"0 zł", desc:"Opis nowego produktu."});
+  siteData.products.push({id:newId, emoji:"n", image:null, name:"Nowy produkt", price:"0 zn", desc:"Opis nowego produk
+tu."});
   renderProducts();
 });
-
 /* ===== PRODUCT DETAIL OVERLAY ===== */
 const detailOverlay = document.getElementById('detail-overlay');
 function openDetail(id){
@@ -943,16 +973,43 @@ function openDetail(id){
   document.getElementById('detail-img').innerHTML = productImageHTML(p);
   document.getElementById('detail-name').textContent = p.name;
   document.getElementById('detail-price').textContent = p.price;
-  document.getElementById('detail-desc').textContent = p.desc || "";
+  document.getElementById('detail-desc').textContent = p.desc || "Brak opisu — dodaj go w panelu zarzndcy.";
   const buyBtn = document.getElementById('detail-buy-btn');
+  buyBtn.style.display = editMode ? "none" : "inline-block";
   buyBtn.textContent = "Dodaj do koszyka";
   buyBtn.classList.remove('added');
+  renderRelatedProducts(p.id);
   detailOverlay.classList.add('active');
   document.body.style.overflow = "hidden";
 }
 function closeDetail(){
+}
   detailOverlay.classList.remove('active');
   document.body.style.overflow = "";
+/* ===== RELATED / INNE PRODUKTY ===== */
+function renderRelatedProducts(currentId){
+  const grid = document.getElementById('related-grid');
+  const wrap = document.getElementById('related-wrap');
+  const others = siteData.products.filter(p => p.id !== currentId);
+  if(others.length === 0){
+    wrap.style.display = "none";
+    return;
+  }
+  wrap.style.display = "block";
+  grid.innerHTML = "";
+  others.forEach(p => {
+    const card = document.createElement('div');
+    card.className = "related-card";
+    card.innerHTML = `
+      <div class="r-img">${productImageHTML(p)}</div>
+      <div class="r-info">
+        <div class="r-name">${p.name}</div>
+        <div class="r-price">${p.price}</div>
+      </div>
+    `;
+    card.addEventListener('click', () => openDetail(p.id));
+    grid.appendChild(card);
+  });
 }
 document.getElementById('detail-close-btn').addEventListener('click', closeDetail);
 document.getElementById('qty-minus').addEventListener('click', () => {
@@ -964,25 +1021,22 @@ document.getElementById('qty-plus').addEventListener('click', () => {
   document.getElementById('qty-value').textContent = currentQty;
 });
 document.getElementById('detail-buy-btn').addEventListener('click', (e) => {
-  if(!currentDetailProduct) return;
+  if(!currentDetailProduct || editMode) return;
   addToCart(currentDetailProduct.id, currentQty);
-  e.target.textContent = "Dodano ✓";
+  e.target.textContent = "Dodano 3";
   e.target.classList.add('added');
   setTimeout(()=>{
     e.target.textContent = "Dodaj do koszyka";
     e.target.classList.remove('added');
   }, 1300);
 });
-
 /* ===== CART ===== */
 const cartPanel = document.getElementById('cart-panel');
 const cartOverlay = document.getElementById('cart-overlay');
-
 function priceToNumber(priceStr){
   const num = parseFloat(String(priceStr).replace(/[^\d.,]/g,"").replace(",","."));
   return isNaN(num) ? 0 : num;
 }
-
 function addToCart(productId, qty){
   const existing = cart.find(c => c.id === productId);
   if(existing){ existing.qty += qty; }
@@ -990,11 +1044,9 @@ function addToCart(productId, qty){
   saveCart();
   renderCart();
   updateCartCount();
-  showToast("Dodano do koszyka 🛍️");
+  showToast("Dodano do koszyka nn");
 }
-
 function saveCart(){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
-
 function updateCartCount(){
   const totalQty = cart.reduce((s,c)=>s+c.qty,0);
   const countEl = document.getElementById('cart-count');
@@ -1005,12 +1057,11 @@ function updateCartCount(){
     countEl.style.display = "none";
   }
 }
-
 function renderCart(){
   const itemsEl = document.getElementById('cart-items');
   itemsEl.innerHTML = "";
   if(cart.length === 0){
-    itemsEl.innerHTML = `<div class="cart-empty">Twój koszyk jest pusty 🛍️</div>`;
+    itemsEl.innerHTML = `<div class="cart-empty">Twój koszyk jest pusty nn</div>`;
   } else {
     let total = 0;
     cart.forEach(c => {
@@ -1026,11 +1077,11 @@ function renderCart(){
           <div class="name">${p.name}</div>
           <div class="price">${c.qty} × ${p.price}</div>
         </div>
-        <button class="remove-item" data-id="${c.id}">Usuń</button>
+        <button class="remove-item" data-id="${c.id}">Usun</button>
       `;
       itemsEl.appendChild(div);
     });
-    document.getElementById('cart-total-value').textContent = total.toFixed(0) + " zł";
+    document.getElementById('cart-total-value').textContent = total.toFixed(0) + " zn";
     itemsEl.querySelectorAll('.remove-item').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const id = parseInt(e.target.dataset.id);
@@ -1042,10 +1093,9 @@ function renderCart(){
     });
   }
   if(cart.length === 0){
-    document.getElementById('cart-total-value').textContent = "0 zł";
+    document.getElementById('cart-total-value').textContent = "0 zn";
   }
 }
-
 function openCart(){
   cartPanel.classList.add('active');
   cartOverlay.classList.add('active');
@@ -1059,14 +1109,13 @@ document.getElementById('cart-close-btn').addEventListener('click', closeCart);
 cartOverlay.addEventListener('click', closeCart);
 document.getElementById('checkout-btn').addEventListener('click', () => {
   if(cart.length === 0){ showToast("Koszyk jest pusty"); return; }
-  showToast("Dziękujemy! Skontaktujemy się w celu finalizacji zamówienia.");
+  showToast("Dzinkujemy! Skontaktujemy sin w celu finalizacji zamówienia.");
   cart = [];
   saveCart();
   renderCart();
   updateCartCount();
   closeCart();
 });
-
 /* ===== LOGIN ===== */
 const loginModal = document.getElementById('login-modal');
 document.getElementById('login-btn').addEventListener('click', () => {
@@ -1086,7 +1135,7 @@ document.getElementById('login-confirm').addEventListener('click', async () => {
     editMode = true;
     loginModal.classList.remove('active');
     applyEditMode();
-    showToast("Zalogowano jako zarządca");
+    showToast("Zalogowano jako zarzndca");
   }catch(err){
     document.getElementById('login-error').style.display = "block";
   }
@@ -1101,14 +1150,14 @@ document.getElementById('logout-btn').addEventListener('click', () => {
   applyEditMode();
 });
 document.getElementById('save-btn').addEventListener('click', saveData);
-
 /* ===== INIT ===== */
 (async function init(){
   try{
     siteData = await fetchSiteData();
   }catch(err){
-    showToast("Nie udało się połączyć z serwerem.");
-    siteData = { logo:null, siteTitle:"Pan Godzisz", heroTitle:"Witaj", heroText:"", aboutText:"", contactText:"", footerText:"", products:[] };
+    showToast("Nie udano sin ponnczyn z serwerem.");
+    siteData = { logo:null, siteTitle:"Pan Godzisz", heroTitle:"Witaj", heroText:"", aboutText:"", contactText:"", foo
+terText:"", products:[] };
   }
   applyContent();
   renderProducts();
@@ -1120,6 +1169,5 @@ document.getElementById('save-btn').addEventListener('click', saveData);
   }
 })();
 </script>
-
 </body>
 </html>
