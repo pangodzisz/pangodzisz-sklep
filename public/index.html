@@ -38,45 +38,49 @@
     background:rgba(255,255,255,0.8);
     backdrop-filter:saturate(180%) blur(20px);
     border-bottom:1px solid var(--border);
-    display:grid;
-    grid-template-columns:1fr auto 1fr;
+    display:flex;
     align-items:center;
+    justify-content:space-between;
     padding:0 26px;
-    height:128px;
+    height:56px;
   }
-  .logo-wrap{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:6px;
-    cursor:default;
-    position:relative;
-    grid-column:2;
-  }
-  .logo-wrap img, .logo-wrap .logo-fallback{
-    height:96px;
-    width:96px;
-    object-fit:cover;
-    border-radius:18px;
-  }
-  .logo-fallback{
+  .header-left{
     display:flex;
     align-items:center;
-    justify-content:center;
-    background:var(--bg-soft);
-    font-size:3.2em;
   }
   .logo-text{
-    font-size:1.3em;
+    font-size:1.05em;
     font-weight:700;
     letter-spacing:-0.01em;
   }
-  body.edit-mode .logo-wrap{ cursor:pointer; }
-  body.edit-mode .logo-wrap::after{
+  body.edit-mode .header-left{ cursor:default; }
+
+  /* ===== DUŻE LOGO POD NAGŁÓWKIEM ===== */
+  .floating-logo{
+    width:300px;
+    height:300px;
+    margin:26px auto;
+    border-radius:48px;
+    background:var(--bg-soft);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:6em;
+    overflow:hidden;
+    cursor:default;
+    position:relative;
+  }
+  .floating-logo img{ width:100%; height:100%; object-fit:cover; }
+  body.edit-mode .floating-logo{ cursor:pointer; }
+  body.edit-mode .floating-logo::after{
     content:"✏️ zmień logo";
-    font-size:0.65em;
-    opacity:0.6;
+    position:absolute;
+    bottom:14px; right:16px;
+    font-size:0.2em;
+    background:rgba(0,0,0,0.55);
+    color:#fff;
+    padding:8px 16px;
+    border-radius:10px;
   }
 
   nav.main-nav{
@@ -105,7 +109,7 @@
 
   nav.main-nav{
     position:absolute;
-    top:128px;
+    top:56px;
     left:0;
     right:0;
     background:#fff;
@@ -122,9 +126,7 @@
   }
 
   @media (max-width:680px){
-    header{ height:96px; }
-    .logo-wrap img, .logo-wrap .logo-fallback{ height:64px; width:64px; }
-    nav.main-nav{ top:96px; }
+    .floating-logo{ width:160px; height:160px; font-size:3.4em; margin:18px auto; }
   }
 
   .header-right{
@@ -975,8 +977,7 @@
 <body>
 
 <header>
-  <div class="logo-wrap" id="logo-wrap">
-    <div id="logo-image-holder"></div>
+  <div class="header-left">
     <span class="logo-text" id="site-title" contenteditable="false">Pan Godzisz</span>
   </div>
 
@@ -1001,6 +1002,10 @@
     </button>
   </div>
 </header>
+
+<div class="floating-logo" id="logo-wrap">
+  <div id="logo-image-holder">🪓</div>
+</div>
 
 <button class="admin-corner" id="login-btn" title="Panel zarządcy"> </button>
 
@@ -1379,7 +1384,7 @@ function renderFeaturedProducts(){
   const container = document.getElementById('featured-products-container');
   if(!container) return;
   container.innerHTML = "";
-  const featured = siteData.products.slice(0, 4);
+  const featured = siteData.products.slice(0, 3);
   if(featured.length === 0){
     container.innerHTML = `<p style="text-align:center; color:var(--muted); grid-column:1/-1;">Produkty pojawią się tutaj po dodaniu ich w zakładce „Produkty”.</p>`;
     return;
