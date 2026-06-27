@@ -38,49 +38,52 @@
     background:rgba(255,255,255,0.8);
     backdrop-filter:saturate(180%) blur(20px);
     border-bottom:1px solid var(--border);
-    display:flex;
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
     align-items:center;
-    justify-content:space-between;
     padding:0 26px;
-    height:68px;
+    height:128px;
   }
   .logo-wrap{
     display:flex;
+    flex-direction:column;
     align-items:center;
-    gap:10px;
+    justify-content:center;
+    gap:6px;
     cursor:default;
     position:relative;
+    grid-column:2;
   }
   .logo-wrap img, .logo-wrap .logo-fallback{
-    height:42px;
-    width:42px;
+    height:96px;
+    width:96px;
     object-fit:cover;
-    border-radius:10px;
+    border-radius:18px;
   }
   .logo-fallback{
     display:flex;
     align-items:center;
     justify-content:center;
     background:var(--bg-soft);
-    font-size:1.5em;
+    font-size:3.2em;
   }
   .logo-text{
-    font-size:1.32em;
+    font-size:1.3em;
     font-weight:700;
     letter-spacing:-0.01em;
   }
   body.edit-mode .logo-wrap{ cursor:pointer; }
   body.edit-mode .logo-wrap::after{
-    content:"✏️";
-    font-size:0.7em;
+    content:"✏️ zmień logo";
+    font-size:0.65em;
     opacity:0.6;
   }
 
   nav.main-nav{
-    display:flex;
-    gap:28px;
+    display:none;
     font-size:0.86em;
     font-weight:400;
+    grid-column:1;
   }
   nav.main-nav a{
     text-decoration:none;
@@ -91,7 +94,7 @@
   nav.main-nav a:hover{ opacity:1; }
 
   .hamburger-btn{
-    display:none;
+    display:block;
     background:none;
     border:none;
     cursor:pointer;
@@ -100,32 +103,36 @@
     color:var(--text);
   }
 
+  nav.main-nav{
+    position:absolute;
+    top:128px;
+    left:0;
+    right:0;
+    background:#fff;
+    flex-direction:column;
+    gap:0;
+    border-bottom:1px solid var(--border);
+    box-shadow:0 8px 20px rgba(0,0,0,0.06);
+  }
+  nav.main-nav.mobile-open{ display:flex; }
+  nav.main-nav a{
+    padding:14px 24px;
+    border-bottom:1px solid var(--border);
+    opacity:1;
+  }
+
   @media (max-width:680px){
-    nav.main-nav{
-      display:none;
-      position:absolute;
-      top:68px;
-      left:0;
-      right:0;
-      background:#fff;
-      flex-direction:column;
-      gap:0;
-      border-bottom:1px solid var(--border);
-      box-shadow:0 8px 20px rgba(0,0,0,0.06);
-    }
-    nav.main-nav.mobile-open{ display:flex; }
-    nav.main-nav a{
-      padding:14px 24px;
-      border-bottom:1px solid var(--border);
-      opacity:1;
-    }
-    .hamburger-btn{ display:block; }
+    header{ height:96px; }
+    .logo-wrap img, .logo-wrap .logo-fallback{ height:64px; width:64px; }
+    nav.main-nav{ top:96px; }
   }
 
   .header-right{
     display:flex;
     align-items:center;
     gap:18px;
+    grid-column:3;
+    justify-self:end;
   }
   .icon-btn{
     background:none;
@@ -204,7 +211,7 @@
   /* ===== HERO ===== */
   .hero{
     text-align:center;
-    padding:120px 20px 90px;
+    padding:60px 20px 90px;
     background:linear-gradient(180deg,#fbfbfd,var(--bg));
   }
   .hero h1{
@@ -318,6 +325,63 @@
   }
   body.edit-mode .product-cat-badge{ display:none; }
 
+  /* ===== STRONA GŁÓWNA: O NAS W SKRÓCIE + WYRÓŻNIONE PRODUKTY ===== */
+  .home-intro{
+    max-width:1000px;
+    margin:0 auto;
+    padding:10px 24px 70px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:50px;
+    align-items:center;
+  }
+  @media (max-width:760px){ .home-intro{ grid-template-columns:1fr; } }
+  .home-intro-img{
+    width:100%;
+    aspect-ratio:4/3;
+    border-radius:24px;
+    background:var(--bg-soft);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:5em;
+    overflow:hidden;
+    cursor:default;
+  }
+  .home-intro-img img{ width:100%; height:100%; object-fit:cover; }
+  body.edit-mode .home-intro-img{ cursor:pointer; position:relative; }
+  body.edit-mode .home-intro-img::after{
+    content:"✏️ zmień zdjęcie";
+    position:absolute;
+    bottom:10px; right:12px;
+    font-size:0.28em;
+    background:rgba(0,0,0,0.55);
+    color:#fff;
+    padding:6px 12px;
+    border-radius:8px;
+  }
+  .home-intro-text h2{ font-size:1.8em; font-weight:700; margin:0 0 14px; letter-spacing:-0.02em; }
+  .home-intro-text p{ font-size:1.02em; line-height:1.7; color:var(--text); }
+
+  .home-featured{
+    max-width:1100px;
+    margin:0 auto;
+    padding:0 24px 90px;
+  }
+  .home-featured .section-head{ text-align:center; margin-bottom:36px; }
+  .home-featured .section-head h2{ font-size:clamp(1.6em,3.6vw,2.2em); font-weight:700; letter-spacing:-0.02em; margin:0 0 6px; }
+  .home-featured .section-head p{ color:var(--muted); margin:0; }
+  .home-featured .see-all{
+    display:block;
+    text-align:center;
+    margin-top:30px;
+    color:var(--accent);
+    text-decoration:none;
+    font-weight:500;
+    font-size:0.95em;
+  }
+  .home-featured .see-all:hover{ text-decoration:underline; }
+
   /* ===== SECTIONS ===== */
   main{
     max-width:1100px;
@@ -347,6 +411,8 @@
     overflow:hidden;
     cursor:pointer;
     position:relative;
+    display:flex;
+    flex-direction:column;
     transition:transform var(--transition), box-shadow var(--transition);
     opacity:0;
     transform:translateY(24px);
@@ -359,6 +425,7 @@
   .product-img{
     width:100%;
     height:180px;
+    flex-shrink:0;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -369,7 +436,7 @@
   }
   .product-img img{ width:100%; height:100%; object-fit:cover; }
   body.edit-mode .product-img::after{
-    content:"✏️ zmień zdjęcie";
+    content:"✏️ dodaj zdjęcie";
     position:absolute;
     bottom:6px;
     right:8px;
@@ -379,9 +446,52 @@
     padding:4px 8px;
     border-radius:6px;
   }
-  .product-info{ padding:18px 20px 22px; text-align:center; }
+  .product-info{
+    padding:18px 20px 22px;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    flex:1;
+  }
   .product-info h3{ margin:0 0 4px; font-size:1.08em; font-weight:600; }
   .product-info .price{ color:var(--muted); font-size:0.95em; margin-bottom:12px; }
+  .product-gallery-edit{
+    display:none;
+    flex-wrap:wrap;
+    gap:6px;
+    justify-content:center;
+    margin-bottom:10px;
+  }
+  body.edit-mode .product-gallery-edit{ display:flex; }
+  .product-gallery-edit .g-thumb{
+    width:36px; height:36px;
+    border-radius:8px;
+    overflow:hidden;
+    position:relative;
+    background:#eceaea;
+  }
+  .product-gallery-edit .g-thumb img{ width:100%; height:100%; object-fit:cover; }
+  .product-gallery-edit .g-remove{
+    position:absolute;
+    top:-4px; right:-4px;
+    width:15px; height:15px;
+    background:#ff3b30;
+    color:#fff;
+    border:none;
+    border-radius:50%;
+    font-size:0.55em;
+    cursor:pointer;
+    line-height:1;
+  }
+  .product-gallery-edit .g-add{
+    width:36px; height:36px;
+    border-radius:8px;
+    border:1.5px dashed var(--muted);
+    background:none;
+    cursor:pointer;
+    font-size:0.9em;
+    color:var(--muted);
+  }
   .product-desc-edit{
     display:none;
     width:100%;
@@ -397,6 +507,21 @@
     background:#fff;
   }
   body.edit-mode .product-desc-edit{ display:block; }
+  .product-params-edit{
+    display:none;
+    width:100%;
+    min-height:44px;
+    margin:0 0 12px;
+    border:1.5px dashed var(--muted);
+    border-radius:10px;
+    padding:8px 10px;
+    font-size:0.78em;
+    font-family:inherit;
+    color:var(--text);
+    resize:vertical;
+    background:#fff;
+  }
+  body.edit-mode .product-params-edit{ display:block; }
   .add-cart-btn{
     background:var(--accent);
     color:#fff;
@@ -406,6 +531,7 @@
     font-size:0.85em;
     font-weight:500;
     cursor:pointer;
+    margin-top:auto;
     transition:background 0.2s, transform 0.15s;
   }
   .add-cart-btn:hover{ background:var(--accent-dark); }
@@ -413,6 +539,7 @@
   body.edit-mode .add-cart-btn{ display:none; }
   .open-detail-edit-btn{
     display:none;
+    margin-top:auto;
     background:var(--bg-soft);
     border:1px solid var(--border);
     color:var(--text);
@@ -502,19 +629,16 @@
     font-size:1em;
   }
   .detail-body{
-    max-width:1000px;
+    max-width:760px;
     margin:0 auto;
-    padding:40px 24px 30px;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:50px;
+    padding:30px 24px 10px;
+    display:flex;
+    flex-direction:column;
     align-items:center;
-  }
-  @media (max-width:760px){
-    .detail-body{ grid-template-columns:1fr; }
   }
   .detail-img{
     width:100%;
+    max-width:520px;
     aspect-ratio:1/1;
     background:var(--bg-soft);
     border-radius:24px;
@@ -528,16 +652,49 @@
     animation:fadeUp 0.6s var(--transition) 0.1s forwards;
   }
   .detail-img img{ width:100%; height:100%; object-fit:cover; }
+  .detail-thumbs{
+    display:flex;
+    gap:10px;
+    margin-top:14px;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+  .detail-thumbs .d-thumb{
+    width:56px; height:56px;
+    border-radius:10px;
+    overflow:hidden;
+    cursor:pointer;
+    border:2px solid transparent;
+    background:#eceaea;
+  }
+  .detail-thumbs .d-thumb.active{ border-color:var(--accent); }
+  .detail-thumbs .d-thumb img{ width:100%; height:100%; object-fit:cover; }
   .detail-info{
+    width:100%;
+    max-width:600px;
+    text-align:center;
+    margin-top:30px;
     opacity:0;
     animation:fadeUp 0.6s var(--transition) 0.25s forwards;
   }
   .detail-info h2{ font-size:2em; font-weight:700; margin:0 0 8px; letter-spacing:-0.02em; }
   .detail-info .price{ font-size:1.3em; color:var(--muted); margin-bottom:20px; }
-  .detail-info .desc{ font-size:1.02em; line-height:1.7; color:var(--text); margin-bottom:30px; }
+  .detail-info .desc{ font-size:1.02em; line-height:1.7; color:var(--text); margin-bottom:24px; text-align:left; }
+  .detail-params{
+    text-align:left;
+    background:var(--bg-soft);
+    border-radius:14px;
+    padding:16px 20px;
+    margin-bottom:28px;
+    font-size:0.92em;
+    line-height:1.8;
+  }
+  .detail-params h4{ margin:0 0 8px; font-size:0.95em; font-weight:600; }
+  .detail-params ul{ margin:0; padding-left:18px; }
   .qty-row{
     display:flex;
     align-items:center;
+    justify-content:center;
     gap:14px;
     margin-bottom:26px;
   }
@@ -738,6 +895,28 @@
     color:#8a6d1d;
     margin:18px 0;
   }
+  .payment-options{ margin:14px 0; }
+  .payment-option{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:10px 12px;
+    margin-bottom:8px;
+    cursor:pointer;
+    font-size:0.88em;
+  }
+  .payment-option input{ width:auto; }
+  .payment-option.disabled{ opacity:0.5; cursor:not-allowed; }
+  .payment-option .po-label{ flex:1; }
+  .payment-option .po-tag{
+    font-size:0.7em;
+    background:var(--bg-soft);
+    color:var(--muted);
+    padding:2px 8px;
+    border-radius:980px;
+  }
   .checkout-actions{ display:flex; gap:10px; margin-top:20px; }
   .checkout-actions .btn{ flex:1; padding:12px; font-size:0.9em; }
 
@@ -803,7 +982,7 @@
 
   <nav class="main-nav" id="main-nav">
     <a href="#" data-view="home" class="nav-active">Strona główna</a>
-    <a href="#" data-view="oferta">Oferta</a>
+    <a href="#" data-view="produkty">Produkty</a>
     <a href="#" data-view="o-nas">O nas</a>
     <a href="#" data-view="kontakt">Kontakt</a>
   </nav>
@@ -830,14 +1009,37 @@
   <div class="hero">
     <h1 id="hero-title" contenteditable="false">Witaj w Pan Godzisz</h1>
     <p id="hero-text" contenteditable="false">Drewno, narzędzia i rzemiosło — wybrane z pasją, dostarczone z troską.</p>
-    <div class="cta"><a href="#" data-view="oferta">Zobacz ofertę</a></div>
+    <div class="cta"><a href="#" data-view="produkty">Zobacz produkty</a></div>
+  </div>
+
+  <div class="home-intro">
+    <div class="home-intro-img" id="home-intro-img-wrap">
+      <div id="home-intro-img-holder">🪓</div>
+    </div>
+    <div class="home-intro-text">
+      <h2 id="home-intro-title" contenteditable="false">Czym się zajmujemy</h2>
+      <p id="home-intro-text-el" contenteditable="false">
+        Jesteśmy lokalnym sklepem łączącym tradycję z nowoczesną ofertą. Znajdziesz u nas starannie wybrane
+        produkty najwyższej jakości — od rzeczy praktycznych na każdy dzień, po dodatki, które robią różnicę.
+        Stawiamy na uczciwe ceny, indywidualne podejście i szybką realizację zamówień.
+      </p>
+    </div>
+  </div>
+
+  <div class="home-featured">
+    <div class="section-head">
+      <h2>Polecane produkty</h2>
+      <p>Kilka rzeczy, które warto zobaczyć na początek</p>
+    </div>
+    <div class="products" id="featured-products-container"></div>
+    <a href="#" data-view="produkty" class="see-all">Zobacz całą ofertę →</a>
   </div>
 </div>
 
-<!-- ===== WIDOK: OFERTA ===== -->
-<div class="view" id="view-oferta">
+<!-- ===== WIDOK: PRODUKTY ===== -->
+<div class="view" id="view-produkty">
   <div class="page-head">
-    <h1>Oferta</h1>
+    <h1>Produkty</h1>
     <p>Wybrane produkty najwyższej jakości</p>
   </div>
   <main>
@@ -884,10 +1086,15 @@
   <div class="detail-close"><button id="detail-close-btn">✕</button></div>
   <div class="detail-body">
     <div class="detail-img" id="detail-img"></div>
+    <div class="detail-thumbs" id="detail-thumbs"></div>
     <div class="detail-info">
       <h2 id="detail-name"></h2>
       <div class="price" id="detail-price"></div>
       <div class="desc" id="detail-desc"></div>
+      <div class="detail-params" id="detail-params" style="display:none;">
+        <h4>Parametry</h4>
+        <ul id="detail-params-list"></ul>
+      </div>
       <div class="qty-row">
         <button id="qty-minus">−</button>
         <span id="qty-value">1</span>
@@ -963,10 +1170,27 @@
 
       <label for="co-notes">Uwagi do zamówienia (opcjonalnie)</label>
       <textarea id="co-notes" placeholder="Np. domofon, godziny dostawy itp."></textarea>
+
+      <label>Sposób płatności</label>
+      <div class="payment-options">
+        <label class="payment-option">
+          <input type="radio" name="co-payment" value="odbior" checked>
+          <span class="po-label">Płatność przy odbiorze (gotówka/karta)</span>
+        </label>
+        <label class="payment-option">
+          <input type="radio" name="co-payment" value="przelew">
+          <span class="po-label">Przelew tradycyjny</span>
+        </label>
+        <label class="payment-option disabled">
+          <input type="radio" name="co-payment" value="online" disabled>
+          <span class="po-label">Płatność online (karta/BLIK)</span>
+          <span class="po-tag">wkrótce</span>
+        </label>
+      </div>
     </div>
 
     <div class="checkout-payment-note">
-      💳 Płatność zostanie skonfigurowana w kolejnym kroku (np. przelew, płatność przy odbiorze lub online). Na razie zamówienie zostanie przyjęte do realizacji.
+      💳 Płatności online zostaną aktywowane wkrótce (np. Stripe, PayU, Przelewy24) — sklep skonfiguruje je samodzielnie. Na razie zamówienie przyjmujemy z płatnością przy odbiorze lub przelewem.
     </div>
 
     <div class="checkout-actions">
@@ -994,6 +1218,7 @@
 
 <input type="file" id="logo-file-input" accept="image/*">
 <input type="file" id="product-file-input" accept="image/*">
+<input type="file" id="home-intro-file-input" accept="image/*">
 <input type="file" id="data-import-input" accept="application/json,.json">
 
 <div class="toast" id="toast"></div>
@@ -1094,6 +1319,16 @@ function renderLogo(){
     holder.innerHTML = `<div class="logo-fallback">🪓</div>`;
   }
 }
+function renderHomeIntro(){
+  const holder = document.getElementById('home-intro-img-holder');
+  if(siteData.homeIntroImage){
+    holder.innerHTML = `<img src="${siteData.homeIntroImage}" alt="">`;
+  } else {
+    holder.innerHTML = `🪓`;
+  }
+  document.getElementById('home-intro-title').textContent = siteData.homeIntroTitle || "Czym się zajmujemy";
+  document.getElementById('home-intro-text-el').innerHTML = siteData.homeIntroText || "";
+}
 function applyContent(){
   document.getElementById('site-title').textContent = siteData.siteTitle;
   document.getElementById('hero-title').textContent = siteData.heroTitle;
@@ -1102,11 +1337,18 @@ function applyContent(){
   document.getElementById('contact-text').innerHTML = siteData.contactText;
   document.getElementById('footer-text').textContent = siteData.footerText;
   renderLogo();
+  renderHomeIntro();
 }
 
 /* ===== RENDER PRODUCTS ===== */
+function getProductImages(p){
+  if(Array.isArray(p.images) && p.images.length) return p.images;
+  if(p.image) return [p.image];
+  return [];
+}
 function productImageHTML(p){
-  if(p.image){ return `<img src="${p.image}" alt="${p.name}">`; }
+  const imgs = getProductImages(p);
+  if(imgs.length){ return `<img src="${imgs[0]}" alt="${p.name}">`; }
   return p.emoji || "📦";
 }
 
@@ -1130,6 +1372,41 @@ function renderFilterPills(){
       activeFilter = btn.dataset.cat;
       renderProducts();
     });
+  });
+}
+
+function renderFeaturedProducts(){
+  const container = document.getElementById('featured-products-container');
+  if(!container) return;
+  container.innerHTML = "";
+  const featured = siteData.products.slice(0, 4);
+  if(featured.length === 0){
+    container.innerHTML = `<p style="text-align:center; color:var(--muted); grid-column:1/-1;">Produkty pojawią się tutaj po dodaniu ich w zakładce „Produkty”.</p>`;
+    return;
+  }
+  featured.forEach((p, idx) => {
+    const card = document.createElement('div');
+    card.className = "product-card";
+    card.dataset.id = p.id;
+    card.style.animationDelay = (idx*0.06)+"s";
+    card.innerHTML = `
+      <div class="product-img">${productImageHTML(p)}</div>
+      <div class="product-info">
+        ${p.category ? `<div class="product-cat-badge">${p.category}</div>` : ""}
+        <h3>${p.name}</h3>
+        <div class="price">${p.price}</div>
+        <button class="add-cart-btn">Dodaj do koszyka</button>
+      </div>
+    `;
+    card.querySelector('.add-cart-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      addToCart(p.id, 1);
+    });
+    card.addEventListener('click', (e) => {
+      if(e.target.closest('.add-cart-btn')) return;
+      openDetail(p.id);
+    });
+    container.appendChild(card);
   });
 }
 
@@ -1159,7 +1436,17 @@ function renderProducts(){
         <h3 contenteditable="false">${p.name}</h3>
         <div class="price" contenteditable="false">${p.price}</div>
         <input type="text" class="product-cat-edit" placeholder="Kategoria (np. Perfumy, Torebki, Drewno)" value="${p.category || ""}">
+        <div class="product-gallery-edit">
+          ${getProductImages(p).map((url,i) => `
+            <div class="g-thumb" data-img-idx="${i}">
+              <img src="${url}" alt="">
+              <button class="g-remove" data-img-idx="${i}" title="Usuń zdjęcie">✕</button>
+            </div>
+          `).join("")}
+          <button class="g-add" title="Dodaj kolejne zdjęcie">＋</button>
+        </div>
         <textarea class="product-desc-edit" placeholder="Opis produktu (widoczny w widoku szczegółów)">${p.desc || ""}</textarea>
+        <textarea class="product-params-edit" placeholder="Parametry — jedna linia = jedna cecha, np.:&#10;Materiał: skóra naturalna&#10;Waga: 350 g">${p.params || ""}</textarea>
         <button class="add-cart-btn">Dodaj do koszyka</button>
         <button class="open-detail-edit-btn">Podgląd / opis ➝</button>
       </div>
@@ -1197,6 +1484,34 @@ function renderProducts(){
     });
   });
 
+  container.querySelectorAll('.g-add').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const card = e.target.closest('.product-card');
+      const id = parseInt(card.dataset.id);
+      collectDataFromDOM();
+      openProductImageUpload(id);
+    });
+  });
+
+  container.querySelectorAll('.g-remove').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const card = e.target.closest('.product-card');
+      const id = parseInt(card.dataset.id);
+      const idx = parseInt(btn.dataset.imgIdx);
+      collectDataFromDOM();
+      const p = siteData.products.find(pr => pr.id === id);
+      if(p){
+        const imgs = getProductImages(p);
+        imgs.splice(idx, 1);
+        p.images = imgs;
+        p.image = imgs[0] || null;
+      }
+      renderProducts();
+    });
+  });
+
   container.querySelectorAll('.product-img').forEach(img => {
     img.addEventListener('click', (e) => {
       if(editMode){
@@ -1219,11 +1534,12 @@ function renderProducts(){
   });
 
   applyEditMode();
+  renderFeaturedProducts();
 }
 
 /* ===== EDIT MODE ===== */
 function applyEditMode(){
-  const ids = ['site-title','hero-title','hero-text','about-text','contact-text','footer-text'];
+  const ids = ['site-title','hero-title','hero-text','about-text','contact-text','footer-text','home-intro-title','home-intro-text-el'];
   ids.forEach(id => document.getElementById(id).setAttribute('contenteditable', editMode ? 'true':'false'));
   document.querySelectorAll('.product-card h3, .product-card .price').forEach(el=>{
     el.setAttribute('contenteditable', editMode ? 'true':'false');
@@ -1238,6 +1554,8 @@ function collectDataFromDOM(){
   siteData.aboutText = document.getElementById('about-text').innerHTML.trim();
   siteData.contactText = document.getElementById('contact-text').innerHTML.trim();
   siteData.footerText = document.getElementById('footer-text').textContent.trim();
+  siteData.homeIntroTitle = document.getElementById('home-intro-title').textContent.trim();
+  siteData.homeIntroText = document.getElementById('home-intro-text-el').innerHTML.trim();
 
   const cards = document.querySelectorAll('.product-card');
   const updated = [];
@@ -1250,7 +1568,9 @@ function collectDataFromDOM(){
     const desc = descEl ? descEl.value.trim() : (existing.desc || "");
     const catEl = card.querySelector('.product-cat-edit');
     const category = catEl ? catEl.value.trim() : (existing.category || "");
-    updated.push({...existing, id, name, price, desc, category});
+    const paramsEl = card.querySelector('.product-params-edit');
+    const params = paramsEl ? paramsEl.value.trim() : (existing.params || "");
+    updated.push({...existing, id, name, price, desc, category, params});
   });
   // produkty niewidoczne aktualnie (np. odfiltrowane) zachowujemy bez zmian
   const updatedIds = new Set(updated.map(p=>p.id));
@@ -1291,6 +1611,25 @@ logoFileInput.addEventListener('change', async (e) => {
   logoFileInput.value = "";
 });
 
+const homeIntroFileInput = document.getElementById('home-intro-file-input');
+document.getElementById('home-intro-img-wrap').addEventListener('click', () => {
+  if(editMode){ homeIntroFileInput.click(); }
+});
+homeIntroFileInput.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if(!file) return;
+  try{
+    showToast("Przesyłanie zdjęcia...");
+    const url = await apiUploadImage(file);
+    siteData.homeIntroImage = url;
+    renderHomeIntro();
+    showToast("Zdjęcie zmienione — pamiętaj zapisać zmiany");
+  }catch(err){
+    showToast("Błąd: " + err.message);
+  }
+  homeIntroFileInput.value = "";
+});
+
 function openProductImageUpload(id){
   uploadTargetProductId = id;
   productFileInput.click();
@@ -1303,9 +1642,14 @@ productFileInput.addEventListener('change', async (e) => {
     const url = await apiUploadImage(file);
     collectDataFromDOM();
     const p = siteData.products.find(pr => pr.id === uploadTargetProductId);
-    if(p){ p.image = url; }
+    if(p){
+      const imgs = getProductImages(p);
+      imgs.push(url);
+      p.images = imgs;
+      p.image = imgs[0];
+    }
     renderProducts();
-    showToast("Zdjęcie zmienione — pamiętaj zapisać zmiany");
+    showToast("Zdjęcie dodane — pamiętaj zapisać zmiany");
   }catch(err){
     showToast("Błąd: " + err.message);
   }
@@ -1322,16 +1666,53 @@ document.getElementById('add-product-btn').addEventListener('click', () => {
 
 /* ===== PRODUCT DETAIL OVERLAY ===== */
 const detailOverlay = document.getElementById('detail-overlay');
+function setDetailMainImage(p, idx){
+  const imgs = getProductImages(p);
+  const url = imgs[idx];
+  document.getElementById('detail-img').innerHTML = url ? `<img src="${url}" alt="${p.name}">` : (p.emoji || "📦");
+  document.querySelectorAll('#detail-thumbs .d-thumb').forEach((t,i) => {
+    t.classList.toggle('active', i === idx);
+  });
+}
+function renderDetailGallery(p){
+  const imgs = getProductImages(p);
+  const thumbsWrap = document.getElementById('detail-thumbs');
+  if(imgs.length <= 1){
+    thumbsWrap.innerHTML = "";
+    thumbsWrap.style.display = "none";
+    return;
+  }
+  thumbsWrap.style.display = "flex";
+  thumbsWrap.innerHTML = imgs.map((url,i) => `
+    <div class="d-thumb ${i===0?'active':''}" data-idx="${i}"><img src="${url}" alt=""></div>
+  `).join("");
+  thumbsWrap.querySelectorAll('.d-thumb').forEach(t => {
+    t.addEventListener('click', () => setDetailMainImage(p, parseInt(t.dataset.idx)));
+  });
+}
+function renderDetailParams(p){
+  const wrap = document.getElementById('detail-params');
+  const list = document.getElementById('detail-params-list');
+  const lines = (p.params || "").split("\n").map(l => l.trim()).filter(Boolean);
+  if(lines.length === 0){
+    wrap.style.display = "none";
+    return;
+  }
+  wrap.style.display = "block";
+  list.innerHTML = lines.map(line => `<li>${line}</li>`).join("");
+}
 function openDetail(id){
   const p = siteData.products.find(pr => pr.id === id);
   if(!p) return;
   currentDetailProduct = p;
   currentQty = 1;
   document.getElementById('qty-value').textContent = currentQty;
-  document.getElementById('detail-img').innerHTML = productImageHTML(p);
+  setDetailMainImage(p, 0);
+  renderDetailGallery(p);
   document.getElementById('detail-name').textContent = p.name;
   document.getElementById('detail-price').textContent = p.price;
   document.getElementById('detail-desc').textContent = p.desc || "Brak opisu — dodaj go w panelu zarządcy.";
+  renderDetailParams(p);
   const buyBtn = document.getElementById('detail-buy-btn');
   buyBtn.style.display = editMode ? "none" : "inline-block";
   buyBtn.textContent = "Dodaj do koszyka";
@@ -1558,11 +1939,13 @@ document.getElementById('checkout-confirm-btn').addEventListener('click', () => 
   // Tutaj w przyszłości można podłączyć prawdziwą płatność (np. Stripe, PayU, Przelewy24).
   // Na razie zamówienie jest tylko zatwierdzane lokalnie (brak backendu zamówień).
   // Dane zamówienia dostępne w obiekcie `orderData` poniżej, gdyby trzeba je wysłać do API.
+  const paymentMethodEl = document.querySelector('input[name="co-payment"]:checked');
   const orderData = {
     name: name.value.trim(),
     phone: phone.value.trim(),
     email: email.value.trim(),
     delivery: coDeliverySelect.value,
+    payment: paymentMethodEl ? paymentMethodEl.value : "odbior",
     street: needsAddress ? street.value.trim() : "",
     zip: needsAddress ? zip.value.trim() : "",
     city: needsAddress ? city.value.trim() : "",
@@ -1689,11 +2072,13 @@ document.addEventListener('keydown', (e) => {
     showToast("Nie udało się połączyć z serwerem.");
     siteData = {
       logo:null, siteTitle:"Pan Godzisz", heroTitle:"Witaj", heroText:"", aboutText:"", contactText:"", footerText:"",
+      homeIntroImage:null, homeIntroTitle:"Czym się zajmujemy",
+      homeIntroText:"Jesteśmy lokalnym sklepem łączącym tradycję z nowoczesną ofertą — od drewna i narzędzi, po perfumy i torebki.",
       products:[
-        {id:1, emoji:"🪵", image:null, name:"Drewno opałowe (worek)", price:"35 zł", category:"Drewno", desc:"Suche drewno opałowe, idealne do kominka i grilla."},
-        {id:2, emoji:"🛠️", image:null, name:"Zestaw narzędzi ogrodniczych", price:"129 zł", category:"Narzędzia", desc:"Komplet podstawowych narzędzi do prac w ogrodzie."},
-        {id:3, emoji:"🌸", image:null, name:"Perfumy Damskie Elegance", price:"189 zł", category:"Perfumy", desc:"Kwiatowo-drzewny zapach na każdą okazję, 50ml."},
-        {id:4, emoji:"👜", image:null, name:"Torebka Skórzana Classic", price:"249 zł", category:"Torebki", desc:"Elegancka torebka z naturalnej skóry, ręcznie wykonana."}
+        {id:1, emoji:"🪵", image:null, images:[], name:"Drewno opałowe (worek)", price:"35 zł", category:"Drewno", desc:"Suche drewno opałowe, idealne do kominka i grilla.", params:"Waga: 20 kg\nWilgotność: poniżej 20%\nRodzaj: drewno liściaste"},
+        {id:2, emoji:"🛠️", image:null, images:[], name:"Zestaw narzędzi ogrodniczych", price:"129 zł", category:"Narzędzia", desc:"Komplet podstawowych narzędzi do prac w ogrodzie.", params:"Liczba elementów: 8\nMateriał: stal nierdzewna"},
+        {id:3, emoji:"🌸", image:null, images:[], name:"Perfumy Damskie Elegance", price:"189 zł", category:"Perfumy", desc:"Kwiatowo-drzewny zapach na każdą okazję, 50ml.", params:"Objętość: 50 ml\nRodzaj zapachu: kwiatowo-drzewny\nTrwałość: 6-8h"},
+        {id:4, emoji:"👜", image:null, images:[], name:"Torebka Skórzana Classic", price:"249 zł", category:"Torebki", desc:"Elegancka torebka z naturalnej skóry, ręcznie wykonana.", params:"Materiał: skóra naturalna\nWymiary: 30x22x10 cm\nKolor: czarny"}
       ]
     };
   }
