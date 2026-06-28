@@ -598,6 +598,12 @@
     font-size:0.82em;
     border-top:1px solid var(--border);
   }
+  .footer-contact{
+    font-size:1.05em;
+    color:var(--text);
+    margin-bottom:10px;
+    line-height:1.8;
+  }
 
   /* ===== PRODUCT DETAIL OVERLAY (full page) ===== */
   .detail-overlay{
@@ -922,6 +928,37 @@
   .checkout-actions{ display:flex; gap:10px; margin-top:20px; }
   .checkout-actions .btn{ flex:1; padding:12px; font-size:0.9em; }
 
+  /* ===== LISTA ZAMÓWIEŃ (admin) ===== */
+  .order-card{
+    background:var(--bg-soft);
+    border-radius:14px;
+    padding:14px 16px;
+    margin-bottom:12px;
+    font-size:0.88em;
+    text-align:left;
+  }
+  .order-card .o-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:6px;
+  }
+  .order-card .o-top strong{ font-size:1.02em; }
+  .order-card .o-date{ color:var(--muted); font-size:0.85em; }
+  .order-card .o-line{ margin:2px 0; color:var(--text); }
+  .order-card .o-items{ margin:8px 0; padding-left:18px; }
+  .order-card .o-delete{
+    background:#ff3b30;
+    color:#fff;
+    border:none;
+    border-radius:980px;
+    padding:5px 14px;
+    font-size:0.78em;
+    cursor:pointer;
+    margin-top:8px;
+  }
+  .orders-empty{ text-align:center; color:var(--muted); padding:30px; }
+
   /* ===== MODAL LOGOWANIA ===== */
   .modal-overlay{
     display:none;
@@ -991,6 +1028,7 @@
   <div class="header-right">
     <div class="admin-bar">
       <span class="pill">Edycja</span>
+      <button class="btn btn-ghost" id="orders-btn" title="Zobacz złożone zamówienia">📦 Zamówienia</button>
       <button class="btn btn-ghost" id="export-btn" title="Pobierz kopię zapasową danych (zalecane na darmowym hostingu!)">⬇️ Eksport</button>
       <button class="btn btn-ghost" id="import-btn" title="Wgraj wcześniejszą kopię zapasową danych">⬆️ Import</button>
       <button class="btn btn-primary" id="save-btn">Zapisz</button>
@@ -1012,7 +1050,6 @@
 <!-- ===== WIDOK: STRONA GŁÓWNA ===== -->
 <div class="view active-view" id="view-home">
   <div class="hero">
-    <h1 id="hero-title" contenteditable="false">Witaj w Pan Godzisz</h1>
     <p id="hero-text" contenteditable="false">Drewno, narzędzia i rzemiosło — wybrane z pasją, dostarczone z troską.</p>
     <div class="cta"><a href="#" data-view="produkty">Zobacz produkty</a></div>
   </div>
@@ -1084,7 +1121,12 @@
   </main>
 </div>
 
-<footer id="footer-text" contenteditable="false">© 2026 Pan Godzisz. Wszystkie prawa zastrzeżone.</footer>
+<footer>
+  <div class="footer-contact" id="footer-contact">
+    📍 ul. Leśna 12, 98-200 Sieradz &nbsp;|&nbsp; 📞 600 123 456 &nbsp;|&nbsp; ✉️ pangodzisz@op.pl
+  </div>
+  <div id="footer-text" contenteditable="false">© 2026 Pan Godzisz. Wszystkie prawa zastrzeżone.</div>
+</footer>
 
 <!-- ===== DETAIL OVERLAY ===== -->
 <div class="detail-overlay" id="detail-overlay">
@@ -1205,6 +1247,18 @@
   </div>
 </div>
 
+<!-- ===== PANEL ZAMÓWIEŃ (admin) ===== -->
+<div class="checkout-overlay-bg" id="orders-overlay-bg">
+  <div class="checkout-box" style="max-width:680px;">
+    <h3>📦 Zamówienia</h3>
+    <div class="checkout-sub" id="orders-sub">Lista zamówień złożonych przez klientów</div>
+    <div id="orders-list"></div>
+    <div class="checkout-actions">
+      <button class="btn btn-ghost" id="orders-close-btn" style="flex:1;">Zamknij</button>
+    </div>
+  </div>
+</div>
+
 <!-- ===== MODAL LOGOWANIA ===== -->
 <div class="modal-overlay" id="login-modal">
   <div class="modal">
@@ -1308,6 +1362,42 @@ async function apiUploadImage(file){
   return data.url;
 }
 
+async function apiSubmitOrder(order){
+  const res = await fetch('/api/orders', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(order)
+  });
+  if(!res.ok){
+    const err = await res.json().catch(()=>({}));
+    throw new Error(err.error || 'Błąd wysyłania zamówienia.');
+  }
+  return res.json();
+}
+
+async function apiGetOrders(){
+  const res = await fetch('/api/orders', {
+    headers:{ 'Authorization':'Bearer ' + authToken }
+  });
+  if(!res.ok){
+    const err = await res.json().catch(()=>({}));
+    throw new Error(err.error || 'Błąd wczytywania zamówień.');
+  }
+  return res.json();
+}
+
+async function apiDeleteOrder(id){
+  const res = await fetch('/api/orders/' + id, {
+    method:'DELETE',
+    headers:{ 'Authorization':'Bearer ' + authToken }
+  });
+  if(!res.ok){
+    const err = await res.json().catch(()=>({}));
+    throw new Error(err.error || 'Błąd usuwania zamówienia.');
+  }
+  return res.json();
+}
+
 function showToast(msg){
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -1336,7 +1426,6 @@ function renderHomeIntro(){
 }
 function applyContent(){
   document.getElementById('site-title').textContent = siteData.siteTitle;
-  document.getElementById('hero-title').textContent = siteData.heroTitle;
   document.getElementById('hero-text').textContent = siteData.heroText;
   document.getElementById('about-text').innerHTML = siteData.aboutText;
   document.getElementById('contact-text').innerHTML = siteData.contactText;
@@ -1544,7 +1633,7 @@ function renderProducts(){
 
 /* ===== EDIT MODE ===== */
 function applyEditMode(){
-  const ids = ['site-title','hero-title','hero-text','about-text','contact-text','footer-text','home-intro-title','home-intro-text-el'];
+  const ids = ['site-title','hero-text','about-text','contact-text','footer-text','home-intro-title','home-intro-text-el'];
   ids.forEach(id => document.getElementById(id).setAttribute('contenteditable', editMode ? 'true':'false'));
   document.querySelectorAll('.product-card h3, .product-card .price').forEach(el=>{
     el.setAttribute('contenteditable', editMode ? 'true':'false');
@@ -1554,7 +1643,6 @@ function applyEditMode(){
 
 function collectDataFromDOM(){
   siteData.siteTitle = document.getElementById('site-title').textContent.trim();
-  siteData.heroTitle = document.getElementById('hero-title').textContent.trim();
   siteData.heroText = document.getElementById('hero-text').textContent.trim();
   siteData.aboutText = document.getElementById('about-text').innerHTML.trim();
   siteData.contactText = document.getElementById('contact-text').innerHTML.trim();
@@ -1913,7 +2001,7 @@ function clearFieldErrors(){
   document.querySelectorAll('.checkout-form .field-error').forEach(el => el.classList.remove('field-error'));
 }
 
-document.getElementById('checkout-confirm-btn').addEventListener('click', () => {
+document.getElementById('checkout-confirm-btn').addEventListener('click', async () => {
   clearFieldErrors();
   const name = document.getElementById('co-name');
   const phone = document.getElementById('co-phone');
@@ -1942,8 +2030,7 @@ document.getElementById('checkout-confirm-btn').addEventListener('click', () => 
 
   // ===== TODO: PŁATNOŚĆ =====
   // Tutaj w przyszłości można podłączyć prawdziwą płatność (np. Stripe, PayU, Przelewy24).
-  // Na razie zamówienie jest tylko zatwierdzane lokalnie (brak backendu zamówień).
-  // Dane zamówienia dostępne w obiekcie `orderData` poniżej, gdyby trzeba je wysłać do API.
+  // Zamówienie jest zapisywane na serwerze (i ewentualnie wysyłane mailem, jeśli skonfigurowano SMTP).
   const paymentMethodEl = document.querySelector('input[name="co-payment"]:checked');
   const orderData = {
     name: name.value.trim(),
@@ -1960,9 +2047,19 @@ document.getElementById('checkout-confirm-btn').addEventListener('click', () => 
       return p ? { name:p.name, price:p.price, qty:c.qty } : null;
     }).filter(Boolean)
   };
-  console.log("Nowe zamówienie:", orderData);
 
-  showToast("Zamówienie złożone! Skontaktujemy się w celu finalizacji. 🎉");
+  const confirmBtn = document.getElementById('checkout-confirm-btn');
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = "Wysyłanie...";
+  try{
+    await apiSubmitOrder(orderData);
+    showToast("Zamówienie złożone! Skontaktujemy się w celu finalizacji. 🎉");
+  }catch(err){
+    showToast("Zamówienie przyjęte lokalnie, ale wysyłka do sklepu nie powiodła się: " + err.message);
+  }
+  confirmBtn.disabled = false;
+  confirmBtn.textContent = "Złóż zamówienie";
+
   cart = [];
   saveCart();
   renderCart();
@@ -1972,6 +2069,69 @@ document.getElementById('checkout-confirm-btn').addEventListener('click', () => 
   ['co-name','co-phone','co-email','co-street','co-zip','co-notes'].forEach(id => {
     document.getElementById(id).value = "";
   });
+});
+
+/* ===== PANEL ZAMÓWIEŃ (ADMIN) ===== */
+const ordersOverlayBg = document.getElementById('orders-overlay-bg');
+
+function renderOrdersList(orders){
+  const list = document.getElementById('orders-list');
+  if(!orders || orders.length === 0){
+    list.innerHTML = `<div class="orders-empty">Brak zamówień.</div>`;
+    return;
+  }
+  const sorted = [...orders].sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+  list.innerHTML = sorted.map(o => {
+    const date = o.createdAt ? new Date(o.createdAt).toLocaleString('pl-PL') : "";
+    const itemsHtml = (o.items||[]).map(it => `<li>${it.name} × ${it.qty} — ${it.price}</li>`).join("");
+    const deliveryLabel = o.delivery === 'odbior' ? 'Odbiór osobisty' : 'Kurier';
+    const paymentLabel = o.payment === 'przelew' ? 'Przelew tradycyjny' : (o.payment === 'online' ? 'Online' : 'Przy odbiorze');
+    return `
+      <div class="order-card" data-id="${o.id}">
+        <div class="o-top"><strong>${o.name}</strong><span class="o-date">${date}</span></div>
+        <div class="o-line">📞 ${o.phone} &nbsp; ✉️ ${o.email}</div>
+        <div class="o-line">🚚 ${deliveryLabel}${o.street ? ` — ${o.street}, ${o.zip} ${o.city}` : ""}</div>
+        <div class="o-line">💳 ${paymentLabel}</div>
+        ${o.notes ? `<div class="o-line">📝 ${o.notes}</div>` : ""}
+        <ul class="o-items">${itemsHtml}</ul>
+        <button class="o-delete" data-id="${o.id}">Usuń / oznacz jako zrealizowane</button>
+      </div>
+    `;
+  }).join("");
+
+  list.querySelectorAll('.o-delete').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      try{
+        await apiDeleteOrder(btn.dataset.id);
+        await loadAndShowOrders();
+      }catch(err){
+        showToast("Błąd: " + err.message);
+      }
+    });
+  });
+}
+
+async function loadAndShowOrders(){
+  document.getElementById('orders-sub').textContent = "Wczytywanie...";
+  try{
+    const orders = await apiGetOrders();
+    document.getElementById('orders-sub').textContent = `Łącznie: ${orders.length} zamówień`;
+    renderOrdersList(orders);
+  }catch(err){
+    document.getElementById('orders-sub').textContent = "Błąd wczytywania zamówień.";
+    showToast("Błąd: " + err.message);
+  }
+}
+
+document.getElementById('orders-btn').addEventListener('click', () => {
+  ordersOverlayBg.classList.add('active');
+  loadAndShowOrders();
+});
+document.getElementById('orders-close-btn').addEventListener('click', () => {
+  ordersOverlayBg.classList.remove('active');
+});
+ordersOverlayBg.addEventListener('click', (e) => {
+  if(e.target === ordersOverlayBg) ordersOverlayBg.classList.remove('active');
 });
 
 /* ===== LOGIN ===== */
@@ -2064,6 +2224,7 @@ dataImportInput.addEventListener('change', async (e) => {
 document.addEventListener('keydown', (e) => {
   if(e.key !== "Escape") return;
   if(checkoutOverlayBg.classList.contains('active')) { closeCheckoutForm(); return; }
+  if(ordersOverlayBg.classList.contains('active')) { ordersOverlayBg.classList.remove('active'); return; }
   if(cartPanel.classList.contains('active')) { closeCart(); return; }
   if(detailOverlay.classList.contains('active')) { closeDetail(); return; }
   if(loginModal.classList.contains('active')) { loginModal.classList.remove('active'); return; }
