@@ -1729,7 +1729,7 @@ function collectDataFromDOM() {
   });
 }
 
-async function saveData() {
+async function saveData(silent = false) {
   collectDataFromDOM();
   try {
     const res = await fetch('/api/data', {
@@ -1738,14 +1738,14 @@ async function saveData() {
       body: JSON.stringify(storeData)
     });
     if (res.ok) {
-      alert('✅ Zapisano!');
+      if (!silent) alert('✅ Zapisano!');
       renderFilters();
       renderFeaturedProducts();
     } else {
-      alert('❌ Błąd zapisu.');
+      if (!silent) alert('❌ Błąd zapisu.');
     }
   } catch(e) {
-    alert('❌ Brak połączenia z serwerem.');
+    if (!silent) alert('❌ Brak połączenia z serwerem.');
   }
 }
 
@@ -1816,6 +1816,7 @@ function uploadProductImg(e, id) {
     p.images[0] = url;
     renderProducts();
     applyEditMode();
+    await saveData(true); // auto-zapis po wgraniu zdjęcia
   };
   document.getElementById('file-input').click();
 }
@@ -1829,6 +1830,7 @@ function addGalleryImg(id) {
     p.images.push(url);
     renderProducts();
     applyEditMode();
+    await saveData(true); // auto-zapis po wgraniu zdjęcia
   };
   document.getElementById('file-input').click();
 }
