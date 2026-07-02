@@ -1809,17 +1809,20 @@ function deleteProduct(e, id) {
 function uploadProductImg(e, id) {
   e.stopPropagation();
   uploadCallback = async (url) => {
+    collectDataFromDOM();
     const p = storeData.products.find(x => x.id === id);
     if (!p) return;
     if (!p.images) p.images = [];
-    p.images[0] = url; // replace main image
+    p.images[0] = url;
     renderProducts();
+    applyEditMode();
   };
   document.getElementById('file-input').click();
 }
 
 function addGalleryImg(id) {
   uploadCallback = async (url) => {
+    collectDataFromDOM();
     const p = storeData.products.find(x => x.id === id);
     if (!p) return;
     if (!p.images) p.images = [];
