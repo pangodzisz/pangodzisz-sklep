@@ -44,12 +44,15 @@
       "id": 3,
       "emoji": "🌳",
       "image": null,
-      "name": "Sadzonki drzew",
+      "name": "Pan Godzisz - Toruń",
       "price": 35,
-      "desc": "Zdrowe sadzonki drzew liściastych i iglastych, hodowane lokalnie. Idealne do ogrodu i sadu.",
+      "desc": "Perfumy damskie „Toruń” o pojemności 100 ml",
       "category": "",
       "descLong": "",
-      "params": ""
+      "params": "",
+      "images": [
+        "https://res.cloudinary.com/dbxhhrogd/image/upload/v1782996016/n5hmb644cynvtvh6plhl.png"
+      ]
     },
     {
       "id": 4,
