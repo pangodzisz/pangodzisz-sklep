@@ -94,7 +94,9 @@
       "desc": "Opis produktu",
       "descLong": "",
       "params": "",
-      "images": []
+      "images": [
+        "https://res.cloudinary.com/dbxhhrogd/image/upload/v1782997584/gulommb2yykrji7jgvhw.png"
+      ]
     }
   ],
   "siteTitle": "Pan Godzisz",
