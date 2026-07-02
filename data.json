@@ -74,13 +74,15 @@
     },
     {
       "id": 1782992986286,
-      "name": "Nowy produkt",
+      "name": "Pan Godzisz - Gdynia",
       "price": 0,
       "category": "",
       "desc": "Opis produktu",
       "descLong": "",
       "params": "",
-      "images": []
+      "images": [
+        "https://res.cloudinary.com/dbxhhrogd/image/upload/v1782997352/xk58hvzpweezegbonqmi.png"
+      ]
     },
     {
       "id": 1782992986890,
