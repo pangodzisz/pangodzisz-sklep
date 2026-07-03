@@ -179,6 +179,18 @@
       "images": [
         "https://res.cloudinary.com/dbxhhrogd/image/upload/v1783040731/hkpp8fgm6agbtjxtnx2b.png"
       ]
+    },
+    {
+      "id": 1783040948351,
+      "name": "Nowy produkt",
+      "price": 0,
+      "category": "",
+      "desc": "Opis produktu",
+      "descLong": "",
+      "params": "",
+      "images": [
+        "https://res.cloudinary.com/dbxhhrogd/image/upload/v1783040957/rpkrqgd1lzciev7du5xf.png"
+      ]
     }
   ],
   "siteTitle": "Pan Godzisz",
