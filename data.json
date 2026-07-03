@@ -155,6 +155,18 @@
         "https://res.cloudinary.com/dbxhhrogd/image/upload/v1783039864/itjsjtzjoq7wpzq3d70s.png",
         "https://res.cloudinary.com/dbxhhrogd/image/upload/v1783039892/fy9kx8c5altaxgigpcqu.png"
       ]
+    },
+    {
+      "id": 1783040033688,
+      "name": "Pan Godzisz City",
+      "price": 0,
+      "category": "",
+      "desc": "Jasnobeżowa torebka Pan Godzisz Classic o wymiarach 23× 16× 7 cm.",
+      "descLong": "",
+      "params": "",
+      "images": [
+        "https://res.cloudinary.com/dbxhhrogd/image/upload/v1783040544/diw8m4nsk5ijiya7uoov.png"
+      ]
     }
   ],
   "siteTitle": "Pan Godzisz",
