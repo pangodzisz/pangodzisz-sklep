@@ -130,15 +130,16 @@
     },
     {
       "id": 1783039641071,
-      "name": "Nowy produkt",
+      "name": "Pan Godzisz Classic",
       "price": 0,
       "category": "",
-      "desc": "Opis produktu",
+      "desc": "Brąz torebka Pan Godzisz Classic o wymiarach 30 × 26,5 × 8 cm.",
       "descLong": "",
       "params": "",
       "images": [
         "https://res.cloudinary.com/dbxhhrogd/image/upload/v1783039662/aosgn44ti7iellfkkk0z.png",
-        "https://res.cloudinary.com/dbxhhrogd/image/upload/v1783039710/oiy7z5wy3ar8zqijdyt2.png"
+        "https://res.cloudinary.com/dbxhhrogd/image/upload/v1783039710/oiy7z5wy3ar8zqijdyt2.png",
+        "https://res.cloudinary.com/dbxhhrogd/image/upload/v1783039754/izhgya1jyvtrhsf91yvx.png"
       ]
     }
   ],
