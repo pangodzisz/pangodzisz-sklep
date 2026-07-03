@@ -167,6 +167,18 @@
       "images": [
         "https://res.cloudinary.com/dbxhhrogd/image/upload/v1783040544/diw8m4nsk5ijiya7uoov.png"
       ]
+    },
+    {
+      "id": 1783040632492,
+      "name": "Pan Godzisz City",
+      "price": 139.99,
+      "category": "Torebka City",
+      "desc": "Vintage brąz torebka Pan Godzisz Classic o wymiarach 23 × 16 × 7 cm.",
+      "descLong": "Torebki od wieków towarzyszą ludzkości – od prostych, materiałowych worków aż po nowoczesne formy, materiały i zastosowania. Sklep Pan Godzisz z przyjemnością przedstawia rewolucyjną nowość w naszej ofercie: dwa modele torebek dostępne w aż 4 różnych kolorach.\n\nNasze najnowsze produkty zostały stworzone z myślą o kobietach. Podczas projektowania torebek stawialiśmy nacisk na ponadczasowy design, wysoką jakość wykonania, wygodę użytkowania oraz przystępną cenę. W przeciwieństwie do torebek sieciówkowych, które łączy jedynie niska cena, nasze produkty oferują znacznie wyższą jakość i trwałość.\n\nWszystkie egzemplarze, od pierwszego do ostatniego etapu produkcji, powstają w Polsce, a konkretnie w Sieradzu. Dzięki wykonaniu z eko skóry nasze torebki są wytrzymałe, odporne na uszkodzenia oraz wodoodporne.",
+      "params": "Materiał: eko-skóra\nWymiary: 23 x 16 x 7 cm\nKolor: Vintage brąz \nCzas oczekiwania: do 7 dni roboczych",
+      "images": [
+        "https://res.cloudinary.com/dbxhhrogd/image/upload/v1783040731/hkpp8fgm6agbtjxtnx2b.png"
+      ]
     }
   ],
   "siteTitle": "Pan Godzisz",
